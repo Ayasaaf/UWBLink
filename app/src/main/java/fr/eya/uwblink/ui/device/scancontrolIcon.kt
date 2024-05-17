@@ -1,4 +1,4 @@
-package fr.eya.uwblink.ui.Bluetooth.componets
+package fr.eya.uwblink.ui.device
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image

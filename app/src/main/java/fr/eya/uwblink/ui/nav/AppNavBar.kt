@@ -27,16 +27,18 @@ import fr.eya.uwblink.ui.ranging.RangingControlIcon
 @Composable
 fun AppNavBar(
     appContainer: AppContainer,
+
+    // parameters for the ranging Button
     isRanging: Boolean,
-
-
     startRanging: () -> Unit,
     stopRanging: () -> Unit,
-
+    CurrentDestination: String?
 
     ) {
     val navController = rememberNavController()
+    //ranging state to store the state of the ranging button
     val rangingState = remember { mutableStateOf(isRanging) }
+    val showRangingFab = CurrentDestination == Screen.Home.route // Check if the current destination is the home screen
 
         Scaffold(
             bottomBar = {
@@ -55,6 +57,7 @@ fun AppNavBar(
             },
             floatingActionButtonPosition = FabPosition.End,
             floatingActionButton = {
+                if (showRangingFab) {
                 Column {
                     FloatingActionButton(
                         shape = CircleShape,
@@ -70,22 +73,10 @@ fun AppNavBar(
                             }
                         }
                     }
-                    /* FloatingActionButton(
-                        shape = CircleShape,
-                        onClick = {},
-                        containerColor = Color.White
-                    ) {
-                        scancontrolIcon(selected = true) {
-                            bluetoothstate.value = isConnected
-                            if (it) {
-                                StartScan()
-                            } else {
-                                StopScan()
-                            }
-                        } */
+
                     }
 
-                }
+                } }
 
 
         ) { innerPadding ->

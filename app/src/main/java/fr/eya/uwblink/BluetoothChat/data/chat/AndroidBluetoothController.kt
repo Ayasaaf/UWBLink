@@ -19,21 +19,15 @@
 package fr.eya.uwblink.uwbranging.BluetoothChat.data.chat
 
 import android.annotation.SuppressLint
-import android.app.PendingIntent
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothServerSocket
 import android.bluetooth.BluetoothSocket
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
-import fr.eya.uwblink.R
+import android.util.Log
 import fr.eya.uwblink.uwbranging.BluetoothChat.domain.BluetoothDeviceDomain
 import fr.eya.uwblink.uwbranging.BluetoothChat.domain.BluetoothMessage
 import fr.eya.uwblink.uwbranging.BluetoothChat.domain.chat.BluetoothController
@@ -63,7 +57,7 @@ class AndroidBluetoothController(
     private val context: Context,
 
     ) : BluetoothController {
-
+    val TAG = "ErrorConnection"
     private val bluetoothManager by lazy {
         context.getSystemService(BluetoothManager::class.java)
     }
@@ -95,8 +89,11 @@ class AndroidBluetoothController(
         _scannedDevices.update { devices ->
             val NewDevice = device.toBluetoothDeviceDomain()
             if (NewDevice in devices) devices else devices + NewDevice
+
         }
+
     }
+
 
     // update the state to is connected for a device scanned when it is paired
     private val BluetoothStateReciever = BluetoothStateReciever { isConnected, bluetoothDevice ->
@@ -106,7 +103,7 @@ class AndroidBluetoothController(
         } else {
             CoroutineScope(Dispatchers.IO).launch {
                 _errors.emit("can't connect to a non-paired device ")
-                //   PairingNotification(context = context , Device.address , Device.name)
+
             }
 
         }
@@ -136,9 +133,6 @@ class AndroidBluetoothController(
             FoundDeviceReciever,
             IntentFilter(BluetoothDevice.ACTION_FOUND)
         )
-
-
-
         UpdateDevices()
         bluetoothAdapter?.startDiscovery()
     }
@@ -164,7 +158,7 @@ class AndroidBluetoothController(
                 currentClientSocket = try {
 
                     currentServerSocket?.accept()
-                } catch (_: IOException) {
+                } catch (e: IOException) {
                     ShouldLoop = false
                     null
 
@@ -187,6 +181,7 @@ class AndroidBluetoothController(
         }.onCompletion {
             CloseConnection()
         }.flowOn(Dispatchers.IO)
+
     }
 
     override fun ConnectToDevice(Device: BluetoothDeviceDomain): Flow<ConnectionResult> {
@@ -202,10 +197,7 @@ class AndroidBluetoothController(
 
             currentClientSocket?.let { socket ->
                 try {
-                    PairingNotification(
-                        context = context,
-                        Device = BluetoothDeviceDomain(Device.address, Device.name)
-                    )
+
                     socket.connect()
                     emit(ConnectionResult.ConnectionEstablished)
                     BluetoothDataTransferService(socket).also {
@@ -235,6 +227,8 @@ class AndroidBluetoothController(
         }
 
         if (dataTransferService == null) {
+            Log.e(TAG, "trySendMessage: Data transfer service is null $dataTransferService")
+
             return null
         }
 
@@ -245,6 +239,7 @@ class AndroidBluetoothController(
         )
 
         dataTransferService?.sendMessage(bluetoothMessage.toByteArray())
+        Log.d(TAG, "trySendMessage: Message sent successfully  $dataTransferService.")
 
         return bluetoothMessage
     }
@@ -262,7 +257,6 @@ class AndroidBluetoothController(
         CloseConnection()
     }
 
-    @SuppressLint("MissingPermission")
     private fun UpdateDevices() {
         if (!hasPermission(android.Manifest.permission.BLUETOOTH_CONNECT)
         ) {
@@ -281,63 +275,6 @@ class AndroidBluetoothController(
 
     companion object {
         const val SERVICE_UUID = "4df18ff6-d922-4bde-ac72-6b25fc7b73ab"
-    }
-
-
-    fun PairingNotification(context: Context, Device: BluetoothDeviceDomain) {
-        val permission = android.Manifest.permission.BLUETOOTH_ADMIN
-
-        if (ContextCompat.checkSelfPermission(context, permission)
-            == PackageManager.PERMISSION_GRANTED
-        ) {
-            val CHANNEL_ID = "my_channel_id "
-            val NotificatioId = 1
-            val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
-                .setContentTitle("PairingRequest")
-                .setContentText("The device ${Device.name} want to pair you .").setSmallIcon(
-                    R.drawable.ic_notification
-                ).addAction(R.drawable.ic_accept, "accept", acceptPendingIntent(context, Device))
-                .addAction(R.drawable.ic_decline, "Refuse", declinePendingIntent(context, Device))
-            val notificationManager = NotificationManagerCompat.from(context)
-            notificationManager.notify(NotificatioId, notificationBuilder.build())
-        }
-
-    }
-
-
-    private fun acceptPendingIntent(
-        context: Context,
-        Device: BluetoothDeviceDomain
-    ): PendingIntent {
-        val permission = android.Manifest.permission.BLUETOOTH_ADMIN
-        val intent =
-            Intent(context, fr.eya.uwblink.uwbranging.BluetoothChat.data.chat.FoundDeviceReciever::class.java)
-        if (ContextCompat.checkSelfPermission(context, permission)
-            == PackageManager.PERMISSION_GRANTED
-        )
-
-            intent.action = "com.example.bluetooth.PAIRING_ACCEPTED"
-        intent.putExtra("Device Name", Device.name)
-        return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-
-
-    }
-
-
-    private fun declinePendingIntent(
-        context: Context,
-        Device: BluetoothDeviceDomain
-    ): PendingIntent {
-        val permission = android.Manifest.permission.BLUETOOTH_ADMIN
-        val intent = Intent(context, BroadcastReceiver::class.java)
-        if (ContextCompat.checkSelfPermission(context, permission)
-            == PackageManager.PERMISSION_GRANTED
-        )
-
-            intent.action = "com.example.bluetooth.PAIRING_DECLINED"
-        intent.putExtra("Device Name", Device.name)
-        return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-
     }
 }
 

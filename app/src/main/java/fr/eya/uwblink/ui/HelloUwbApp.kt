@@ -11,8 +11,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import fr.eya.uwblink.AppContainer
-import fr.eya.uwblink.ui.Bluetooth.BluetoothViewModel
-import fr.eya.uwblink.ui.Bluetooth.componets.DeviceScreen
+import fr.eya.uwblink.ui.Bluetooth.componets.BluetoothViewModel
+import fr.eya.uwblink.ui.device.DeviceScreen
 import fr.eya.uwblink.ui.nav.AppNavBar
 import fr.eya.uwblink.ui.ranging.RangingViewModel
 import fr.eya.uwblink.ui.theme.MyAppTheme

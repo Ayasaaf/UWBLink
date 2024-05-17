@@ -20,7 +20,6 @@
 
 package fr.eya.uwblink.ui
 
-
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
@@ -36,19 +35,22 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import fr.eya.uwblink.HelloUwbApplication
-import fr.eya.uwblink.ui.Bluetooth.BluetoothViewModel
+import fr.eya.uwblink.ui.Bluetooth.componets.BluetoothViewModel
+
 
 private const val PERMISSION_REQUEST_CODE = 1234
+
 
 @AndroidEntryPoint
 
 class MainActivity : ComponentActivity() {
-    private val viewModel: BluetoothViewModel by lazy {
-        (application as HelloUwbApplication).container.viewModel
 
-    }
+
+
+
     private val bluetoothManager by lazy {
         applicationContext.getSystemService(BluetoothManager::class.java)
     }
@@ -81,11 +83,20 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
-
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            permissionLauncher.launch(
+                arrayOf(
+                    Manifest.permission.BLUETOOTH_SCAN,
+                    Manifest.permission.BLUETOOTH_CONNECT,
+                )
+            )
+        }
 
         (application as HelloUwbApplication).initContainer {
             runOnUiThread { setContent {
+                val viewModel = hiltViewModel<BluetoothViewModel>()
                 val state by viewModel.state.collectAsState()
+
 
                 LaunchedEffect(key1 = state.ErrorMessage) {
                     state.ErrorMessage?.let { message ->
@@ -97,7 +108,7 @@ class MainActivity : ComponentActivity() {
                     }
                 }
                 LaunchedEffect(key1 = state.isConnected) {
-                    if(state.isConnected) {
+                    if (state.isConnected) {
                         Toast.makeText(
                             applicationContext,
                             "You're connected!",
@@ -107,9 +118,9 @@ class MainActivity : ComponentActivity() {
                 }
 
                 HelloUwbApp(
-
-
-                    (application as HelloUwbApplication).container) } }
+                    (application as HelloUwbApplication).container
+                )
+            } }
         }
 
         /**
@@ -192,5 +203,3 @@ class MainActivity : ComponentActivity() {
                 .toTypedArray()
     }
 }
-
-

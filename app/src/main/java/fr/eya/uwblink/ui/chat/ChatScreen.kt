@@ -1,5 +1,6 @@
-package fr.eya.uwblink.ui.Bluetooth.componets
+package fr.eya.uwblink.ui.chat
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import fr.eya.uwblink.ui.Bluetooth.BluetoothUiState
 
-@OptIn(ExperimentalComposeUiApi::class)
+
 @Composable
 fun ChatScreen(
     navController: NavController,
@@ -37,6 +37,7 @@ fun ChatScreen(
     OnDisconnect: () -> Unit,
     OnSendMessage: (String) -> Unit
 ) {
+    val TAG = "ChatScreen"
     val message = rememberSaveable { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
     Column(modifier = Modifier.fillMaxSize()) {
@@ -69,7 +70,9 @@ fun ChatScreen(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            Log.d(TAG, "compose   messages: ${state.messages}")
             items(state.messages) { message ->
+
                 Column(modifier = Modifier.fillMaxWidth()) {
 
 
@@ -79,6 +82,8 @@ fun ChatScreen(
                             if (message.isFromLocalUser) Alignment.End else Alignment.Start
                         )
                     )
+                    Log.d(TAG, "Sent  messages: ${state.messages}")
+
                 }
             }
         }
@@ -90,7 +95,8 @@ fun ChatScreen(
         ) {
             TextField(
                 value = message.value,
-                onValueChange = { message.value = it },
+                onValueChange = { message.value = it
+                   },
                 modifier = Modifier.weight(1f),
                 placeholder = {
                     Text(text = "Message")
@@ -100,6 +106,7 @@ fun ChatScreen(
                 OnSendMessage(message.value)
                 message.value = ""
                 keyboardController?.hide()
+                Log.d(TAG, "Send button clicked. Message sent: ${message.value}")
             }) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.Send,

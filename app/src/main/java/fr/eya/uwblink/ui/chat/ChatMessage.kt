@@ -1,4 +1,4 @@
-package fr.eya.uwblink.ui.Bluetooth.componets
+package fr.eya.uwblink.ui.chat
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

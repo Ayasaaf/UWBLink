@@ -8,7 +8,6 @@ buildscript {
     dependencies {
         classpath ("com.google.dagger:hilt-android-gradle-plugin:2.51")
         classpath ("com.google.protobuf:protobuf-gradle-plugin:0.9.4")
-        classpath ("com.android.tools.build:gradle:3.0.0")
 
     }
 }

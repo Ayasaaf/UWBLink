@@ -1,4 +1,4 @@
-package fr.eya.uwblink.ui.Bluetooth.componets
+package fr.eya.uwblink.ui.device
 
 import LoaderAnimation
 import android.content.Context
@@ -79,18 +79,9 @@ fun DeviceScreen(
             Button(
                 onClick = {
                     onStartServer()
-
-                    when {
-                        state.isConnecting -> {
-                            navController.navigate("Wait_Screen")
-                        }
-
-                        state.isConnected -> {
-
-                            navController.navigate("Chat_Screen")
-                        }
+                    navController.navigate("Chat_Screen")
                     }
-                }
+
             ) {
                 Text(text = "Start Pairing")
             }

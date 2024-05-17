@@ -3,7 +3,6 @@ package fr.eya.uwblink.uwbranging.data
 import android.content.ContentResolver
 import android.content.Context
 import fr.eya.uwblink.AppContainer
-import fr.eya.uwblink.ui.Bluetooth.BluetoothViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -11,7 +10,7 @@ import kotlinx.coroutines.launch
 
 internal class AppContainerImpl(
     private val context: Context,
-    afterLoading: () -> Unit, override val viewModel: BluetoothViewModel,
+    afterLoading: () -> Unit,
 ) : AppContainer {
     private val coroutineScope = CoroutineScope(Dispatchers.IO + Job())
 

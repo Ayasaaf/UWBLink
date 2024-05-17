@@ -1,4 +1,3 @@
-
 /*
  *
  * Copyright (C) 2022 The Android Open Source Project
@@ -24,7 +23,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 
-class BluetoothStateReciever (private val onStateChanged: (isConnected: Boolean, BluetoothDevice) -> Unit) :
+class BluetoothStateReciever(
+    private val onStateChanged: (isConnected: Boolean, BluetoothDevice) -> Unit) :
     BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         val device = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -37,10 +37,11 @@ class BluetoothStateReciever (private val onStateChanged: (isConnected: Boolean,
         when (intent?.action) {
             BluetoothDevice.ACTION_ACL_CONNECTED -> {
 
-              onStateChanged(true , device?: return)
+                onStateChanged(true, device ?: return)
             }
+
             BluetoothDevice.ACTION_ACL_DISCONNECTED -> {
-                onStateChanged(false , device?: return)
+                onStateChanged(false, device ?: return)
             }
         }
     }

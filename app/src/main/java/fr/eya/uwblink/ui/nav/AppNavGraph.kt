@@ -1,23 +1,28 @@
 package fr.eya.uwblink.ui.nav
 
 import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import fr.eya.uwblink.AppContainer
-import fr.eya.uwblink.ui.Bluetooth.BluetoothViewModel
-import fr.eya.uwblink.ui.Bluetooth.componets.ChatScreen
-import fr.eya.uwblink.ui.Bluetooth.componets.DeviceScreen
-import fr.eya.uwblink.ui.Bluetooth.componets.WaitScreen
+import fr.eya.uwblink.ui.Bluetooth.componets.BluetoothViewModel
+import fr.eya.uwblink.ui.chat.ChatScreen
 import fr.eya.uwblink.ui.control.ControlRoute
 import fr.eya.uwblink.ui.control.ControlViewModel
+import fr.eya.uwblink.ui.device.DeviceScreen
 import fr.eya.uwblink.ui.home.HomeRoute
 import fr.eya.uwblink.ui.home.HomeViewModel
 import fr.eya.uwblink.ui.nav.AppDestination.CONTROL_ROUTE
@@ -25,6 +30,7 @@ import fr.eya.uwblink.ui.send.SendRoute
 import fr.eya.uwblink.ui.send.SendViewModel
 import fr.eya.uwblink.ui.settings.SettingsRoute
 import fr.eya.uwblink.ui.settings.SettingsViewModel
+
 
 @Composable
 fun AppNavGraph(
@@ -35,7 +41,7 @@ fun AppNavGraph(
 
     ) {
     val viewModel = hiltViewModel<BluetoothViewModel>()
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
     var TAG = "AppNavGraph"
     NavHost(
         navController = navController,
@@ -56,8 +62,6 @@ fun AppNavGraph(
         }
 
         composable(AppDestination.DEVICE_ROUTE) {
-            val viewModel = hiltViewModel<BluetoothViewModel>()
-            val state by viewModel.state.collectAsState()
 
             DeviceScreen(
                 state = state,
@@ -69,43 +73,35 @@ fun AppNavGraph(
 
                 )
         }
-
-
-
-
-//        composable("Chat_Screen") {
-//            when {
-//                state.isConnecting -> {
-//                    navController.navigate("Wait_Screen")
-//                }
-//                state.isConnected -> {
-//
-//                    ChatScreen(
-//                        state = state,
-//                        OnDisconnect = viewModel::disconnectFromDevice,
-//                        OnSendMessage = viewModel::sendMessage,
-//                        navController = navController,
-//                    )
-//                }
-//            }
-//        }
-        composable(AppDestination.CHAT_ROUTE) {
+        composable("Chat_Screen") {
+            Log.d(TAG, "Chat_Screen: State - $state")
             when {
                 state.isConnecting -> {
-                    Log.d(TAG, "AppNavGraph: state.isConnecting ")
-                    navController.navigate(AppDestination.WAIT_SCREEN)
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        CircularProgressIndicator()
+                        Text(text = "Connecting ...")
+                    }
                 }
+
                 state.isConnected -> {
-                    Log.d(TAG, "AppNavGraph: state.isConnected ")
-                    ChatScreen(
-                        state = state,
+                    Log.d(TAG, "Chat_Screen: Connected")
+
+                    ChatScreen(state = state,
                         OnDisconnect = viewModel::disconnectFromDevice,
                         OnSendMessage = viewModel::sendMessage,
                         navController = navController,
-                    )
+                       )
+                }
+                else -> {
+                    Log.d(TAG, "Chat_Screen: Not Connecting or Connected")
                 }
             }
         }
+
 
         composable(CONTROL_ROUTE) {
             val controlViewModel: ControlViewModel =
@@ -141,11 +137,7 @@ fun AppNavGraph(
                 )
             SettingsRoute(settingsViewModel)
         }
-        composable("Wait_Screen") {
-            if (state.isConnecting) {
-                WaitScreen()
-            }
-        }
+
     }
 }
 
