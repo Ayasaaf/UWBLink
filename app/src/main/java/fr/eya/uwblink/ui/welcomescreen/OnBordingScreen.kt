@@ -43,6 +43,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import fr.eya.uwblink.R
+import fr.eya.uwblink.ui.nav.AppDestination
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
@@ -196,7 +197,7 @@ fun ButtonsSection(
                 onClick = {
                     OnBoardingIsFinished(navController = navController, context = context)
                     navController.popBackStack()
-                    navController.navigate("MainScreen")
+                    navController.navigate(AppDestination.Main_Route)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -253,7 +254,4 @@ fun OnBoardingIsFinished(navController: NavController, context: Context) {
     editor.apply()
 
 }
-fun isOnBoardingFinished(context: Context): Boolean {
-    val sharedPreferences = context.getSharedPreferences("On_Boarding_Screen", Context.MODE_PRIVATE)
-    return sharedPreferences.getBoolean("isFinished", false)
-}
+

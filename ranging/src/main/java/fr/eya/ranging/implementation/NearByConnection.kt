@@ -30,9 +30,9 @@ private const val CONNECTION_NAME = "UWBLink"
 
 internal class NearByConnection(
     context: Context,
-    private val dispatcher: CoroutineDispatcher,
-    private val connectionsClient: ConnectionsClient = Nearby.getConnectionsClient(context)
-) {
+    dispatcher: CoroutineDispatcher,
+    private val connectionsClient: ConnectionsClient = Nearby.getConnectionsClient(context),
+)  {
     private val coroutineScope =
         CoroutineScope(dispatcher + Job() + CoroutineExceptionHandler { _, e ->
             Log.e(
@@ -46,25 +46,50 @@ internal class NearByConnection(
     private val connectionLifecycleCallback =
         object : ConnectionLifecycleCallback() {
             override fun onConnectionInitiated(endPointId: String, connectionInfo: ConnectionInfo) {
+                Log.d("NearbyConnections", "onConnectionInitiated: $endPointId $connectionInfo")
                 coroutineScope.launch {
                     connectionsClient.acceptConnection(endPointId, payloadCallback).await()
+                    Log.d("NearbyConnections", "Connection accepted: $endPointId")
+
                 }
             }
 
             override fun onConnectionResult(endPointId: String, result: ConnectionResolution) {
+                Log.d(
+                    "NearbyConnections",
+                    "onConnectionResult: $endPointId, ${result.status.statusCode}"
+                )
+
+
                 if (result.status.statusCode == ConnectionsStatusCodes.STATUS_OK) {
+                    Log.d("NearbyConnections", "Connection successful: $endPointId")
+
+                    dispatchEvent(NearbyEvent.EndpointLost(endPointId))
+                }
+                else {
+                    Log.d("NearbyConnections", "Connection failed: $endPointId, Status Code: ${result.status.statusCode}")
                     dispatchEvent(NearbyEvent.EndpointLost(endPointId))
                 }
             }
 
+
             override fun onDisconnected(endpointId: String) {
+                Log.d("NearbyConnections", "onDisconnected: $endpointId")
+
                 dispatchEvent(NearbyEvent.EndpointLost(endpointId))
             }
         }
     private val payloadCallback =
         object : PayloadCallback() {
             override fun onPayloadReceived(endpointId: String, payload: Payload) {
-                val bytes = payload.asBytes() ?: return
+                Log.d("onPayloadReceived", "Payload received from endpoint: $endpointId")
+
+                val bytes = payload.asBytes()
+                if (bytes == null) {
+                    Log.d("onPayloadReceived", "Payload is null, returning")
+                    return
+                }
+                Log.d("onPayloadReceived", "Payload size: ${bytes.size} bytes")
                 dispatchEvent(NearbyEvent.PayloadReceived(endpointId, bytes))
             }
 
@@ -77,6 +102,8 @@ internal class NearByConnection(
     private val endpointDiscoveryCallback =
         object : EndpointDiscoveryCallback() {
             override fun onEndpointFound(endPointId: String, info: DiscoveredEndpointInfo) {
+                Log.d("NearbyConnections", "onEndpointFound: $endPointId")
+
                 coroutineScope.launch {
                     connectionsClient.requestConnection(
                         CONNECTION_NAME,
@@ -102,6 +129,8 @@ internal class NearByConnection(
     private var dispatchEvent: (event: NearbyEvent) -> Unit = {}
 
     fun startDiscovery() = callbackFlow {
+        Log.d("NearbyConnections", "startDiscovery")
+
         dispatchEvent = { trySend(it) }
         coroutineScope.launch {
             connectionsClient.startDiscovery(
@@ -119,6 +148,8 @@ internal class NearByConnection(
     }
 
     fun startAdvertising() = callbackFlow {
+        Log.d("NearbyConnections", "startAdvertising")
+
         dispatchEvent = {
             trySend(it)
         }

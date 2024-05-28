@@ -2,6 +2,7 @@ package fr.eya.uwblink.uwbranging.data
 
 import android.content.ContentResolver
 import android.content.Context
+import android.util.Log
 import fr.eya.uwblink.AppContainer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,11 +30,19 @@ internal class AppContainerImpl(
         coroutineScope.launch {
             settingsStore.appSettings.collect {
                 val endpointId = it.deviceDisplayName + "|" + it.deviceUuid
+                Log.d("AppContainerImpl", "Collected appSettings: $endpointId")
+
                 if (_rangingResultSource == null) {
+                    Log.d("AppContainerImpl", "Initializing UwbRangingControlSourceImpl")
+
                     _rangingResultSource =
                         UwbRangingControlSourceImpl(context, endpointId, coroutineScope)
                     afterLoading()
+                    Log.d("AppContainerImpl", "afterLoading called")
+
                 } else {
+                    Log.d("AppContainerImpl", "Updating existing rangingResultSource")
+
                     rangingResultSource.deviceType = it.deviceType
                     rangingResultSource.updateEndpointId(endpointId)
                 }

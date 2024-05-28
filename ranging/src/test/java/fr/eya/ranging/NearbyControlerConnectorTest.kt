@@ -47,7 +47,7 @@ class NearbyControlerConnectorTest {
     private val uwbEndpoint = UwbEndPoint("UWB2", byteArrayOf(3, 4, 5))
 
     private val controleeSessionInfo =
-        ResourceBundle.Control.newBuilder()
+        ResourceBundle.Control.newBuilder
             .setId("UWB1")
             .setMetadata(ByteString.copyFrom(byteArrayOf(1, 2, 3)))
             .setLocalAddress(Shorts.fromByteArray(byteArrayOf(1, 2)).toInt())
@@ -55,7 +55,7 @@ class NearbyControlerConnectorTest {
                 UwbConnectionInfo.newBuilder()
                     .setCapabilities(
                         UwbCapabilities.newBuilder()
-                            .addAllSupportedConfigIds(listOf(RangingParameters.UWB_CONFIG_ID_1))
+                            .addAllSupportedConfigIds(listOf(RangingParameters.CONFIG_UNICAST_DS_TWR))
                             .setSupportsAzimuth(true)
                             .setSupportsElevation(true)
                             .build()
@@ -71,7 +71,7 @@ class NearbyControlerConnectorTest {
         whenever(controllerSessionScope.localAddress).thenReturn(UwbAddress(byteArrayOf(3, 4)))
         whenever(controllerSessionScope.uwbComplexChannel).thenReturn(UwbComplexChannel(9, 11))
         controllerConnector =
-            NearByControllerConnector(uwbEndpoint, RangingParameters.UWB_CONFIG_ID_1, connections) {
+            NearByControllerConnector(uwbEndpoint, RangingParameters.CONFIG_UNICAST_DS_TWR, connections) {
                 controllerSessionScope
             }
     }
@@ -104,7 +104,7 @@ class NearbyControlerConnectorTest {
         assertThat(event.sessionScope).isSameInstanceAs(controllerSessionScope)
         assertThat(event.complexChannel.channel).isEqualTo(9)
         assertThat(event.complexChannel.preambleIndex).isEqualTo(11)
-        assertThat(event.configId).isEqualTo(RangingParameters.UWB_CONFIG_ID_1)
+        assertThat(event.configId).isEqualTo(RangingParameters.CONFIG_UNICAST_DS_TWR)
         assertThat(event.endpointAddress).isEqualTo(UwbAddress(byteArrayOf(1, 2)))
         assertThat(event.endpoint.id).isEqualTo("UWB1")
         assertThat(event.endpoint.metadata).isEqualTo(byteArrayOf(1, 2, 3))
@@ -122,7 +122,7 @@ class NearbyControlerConnectorTest {
                     UwbConnectionInfo.newBuilder()
                         .setConfiguration(
                             UwbConfiguration.newBuilder()
-                                .setConfigId(RangingParameters.UWB_CONFIG_ID_1)
+                                .setConfigId(RangingParameters.CONFIG_UNICAST_DS_TWR)
                                 .setChannel(9)
                                 .setPreambleIndex(11)
                                 .setSessionId(event.sessionId)

@@ -1,6 +1,7 @@
 package fr.eya.uwblink.uwbranging.data
 
 import android.content.Context
+import android.util.Log
 import androidx.core.uwb.RangingParameters
 import fr.eya.ranging.EndpointEvents
 import fr.eya.ranging.UwbConnectionManager
@@ -43,9 +44,14 @@ internal class UwbRangingControlSourceImpl(
 
     override val isRunning = runningStateFlow.asStateFlow()
 
+
     private fun getSessionScope(deviceType: DeviceType, configType: ConfigType): UwbSessionScope {
+        Log.d("getSessionScope", "Called with deviceType: $deviceType, configType: $configType")
+
         return when (deviceType) {
-            DeviceType.CONTROLLEE -> uwbConnectionManager.controleeUwbScope(uwbEndpoint)
+            DeviceType.CONTROLLEE ->{
+                Log.d("getSessionScope", "DeviceType is CONTROLLEE")
+            uwbConnectionManager.controleeUwbScope(uwbEndpoint) }
             DeviceType.CONTROLLER ->
                 uwbConnectionManager.controllerUwbScope(uwbEndpoint, when (configType) {
                     ConfigType.CONFIG_UNICAST_DS_TWR -> RangingParameters.CONFIG_UNICAST_DS_TWR
@@ -57,7 +63,10 @@ internal class UwbRangingControlSourceImpl(
     }
 
     override fun observeRangingResults(): Flow<EndpointEvents> {
+        Log.d("observeRangingResults", "observeRangingResults called  {$resultFlow}")
+
         return resultFlow
+
     }
 
     override var deviceType: DeviceType by
@@ -85,14 +94,27 @@ internal class UwbRangingControlSourceImpl(
     }
 
     override fun start() {
+        Log.d("start", "Starting the ranging job")
+
         if (rangingJob == null) {
+            Log.d("start", "No existing ranging job found, creating a new one")
+
             rangingJob =
                 coroutineScope.launch {
+                    Log.d("start", "Launching coroutine for preparing the UWB session")
+
                     uwbSessionScope.prepareSession().collect {
+                        Log.d("start", "Collected session result: $it")
+
                         resultFlow.tryEmit(it)
                     }
                 }
+            Log.d("start", "Updating runningStateFlow to true")
+
             runningStateFlow.update { true }
+        } else {
+            Log.d("start", "Ranging job already running")
+
         }
     }
 

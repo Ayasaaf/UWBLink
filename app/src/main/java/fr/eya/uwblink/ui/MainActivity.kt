@@ -21,9 +21,6 @@
 package fr.eya.uwblink.ui
 
 import android.Manifest
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothManager
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -31,7 +28,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -48,79 +44,42 @@ private const val PERMISSION_REQUEST_CODE = 1234
 
 class MainActivity : ComponentActivity() {
 
-
-
-
-    private val bluetoothManager by lazy {
-        applicationContext.getSystemService(BluetoothManager::class.java)
-    }
-    private val bluetoothAdapter by lazy {
-        bluetoothManager?.adapter
-    }
-
-    private val isBluetoothEnabled: Boolean
-        get() = bluetoothAdapter?.isEnabled == true
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         requestPermissions()
-        val enableBluetoothLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { /* Not needed */ }
-
-        val permissionLauncher = registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        ) { perms ->
-            val canEnableBluetooth = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                perms[Manifest.permission.BLUETOOTH_CONNECT] == true
-            } else true
-
-            if(canEnableBluetooth && !isBluetoothEnabled) {
-                enableBluetoothLauncher.launch(
-                    Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-                )
-            }
-        }
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            permissionLauncher.launch(
-                arrayOf(
-                    Manifest.permission.BLUETOOTH_SCAN,
-                    Manifest.permission.BLUETOOTH_CONNECT,
-                )
-            )
-        }
 
         (application as HelloUwbApplication).initContainer {
-            runOnUiThread { setContent {
-                val viewModel = hiltViewModel<BluetoothViewModel>()
-                val state by viewModel.state.collectAsState()
+            runOnUiThread {
+                setContent {
+                    val viewModel = hiltViewModel<BluetoothViewModel>()
+                    val state by viewModel.state.collectAsState()
 
 
-                LaunchedEffect(key1 = state.ErrorMessage) {
-                    state.ErrorMessage?.let { message ->
-                        Toast.makeText(
-                            applicationContext,
-                            message,
-                            Toast.LENGTH_LONG
-                        ).show()
+                    LaunchedEffect(key1 = state.ErrorMessage) {
+                        state.ErrorMessage?.let { message ->
+                            Toast.makeText(
+                                applicationContext,
+                                message,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
-                }
-                LaunchedEffect(key1 = state.isConnected) {
-                    if (state.isConnected) {
-                        Toast.makeText(
-                            applicationContext,
-                            "You're connected!",
-                            Toast.LENGTH_LONG
-                        ).show()
+                    LaunchedEffect(key1 = state.isConnected) {
+                        if (state.isConnected) {
+                            Toast.makeText(
+                                applicationContext,
+                                "You're connected!",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
-                }
 
-                HelloUwbApp(
-                    (application as HelloUwbApplication).container
-                )
-            } }
+                    HelloUwbApp(
+                        (application as HelloUwbApplication).container
+                    )
+                }
+            }
         }
 
         /**

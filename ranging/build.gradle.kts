@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = "fr.eya.ranging"
-    compileSdk = 34
+    compileSdk = 33
 
     defaultConfig {
 
@@ -109,7 +109,7 @@ dependencies {
 //uwb
     implementation ("androidx.core.uwb:uwb:1.0.0-alpha05")
 
-    implementation ("com.google.android.gms:play-services-tasks:18.0.2")
+    implementation ("com.google.android.gms:play-services-tasks:18.1.0")
 
     implementation ("com.google.truth:truth:1.1.3")
     implementation ("com.google.guava:guava:31.1-jre")
@@ -120,5 +120,11 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     implementation ("com.airbnb.android:lottie:5.2.0")
+    implementation ("com.google.android.gms:play-services-location:21.2.0")
+
+
+    implementation ("androidx.appcompat:appcompat:1.5.1")
+    implementation ("androidx.test:core:1.5.0-alpha02")
+    implementation ("com.google.android.material:material:1.6.1")
 
 }

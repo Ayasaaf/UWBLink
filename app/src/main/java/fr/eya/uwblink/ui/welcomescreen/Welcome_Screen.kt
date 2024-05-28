@@ -32,6 +32,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import fr.eya.uwblink.R
+import fr.eya.uwblink.ui.nav.AppDestination
 
 @Preview
 @Composable
@@ -43,6 +44,7 @@ fun HelloScreen(navController: NavController) {
       //  verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -105,7 +107,7 @@ fun HelloScreen(navController: NavController) {
                     modifier = Modifier.size(100.dp)
                 )
                 Button(
-                    onClick = { navController.navigate("MainScreen") },
+                    onClick = { navController.navigate(AppDestination.DEVICE_ROUTE) },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = MaterialTheme.colors.primary,
                         contentColor = MaterialTheme.colors.onPrimary
@@ -127,7 +129,7 @@ fun HelloScreen(navController: NavController) {
                     modifier = Modifier.size(100.dp)
                 )
                 Button(
-                    onClick = { navController.navigate("MainScreen") },
+                    onClick = { navController.navigate(AppDestination.DEVICE_ROUTE) },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = MaterialTheme.colors.primary,
                         contentColor = MaterialTheme.colors.onPrimary

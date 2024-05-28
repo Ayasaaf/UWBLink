@@ -1,6 +1,7 @@
 package fr.eya.uwblink.ui.nav
 
-import android.util.Log
+import OnboardingScreen
+import SplashScreen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,17 +20,22 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import fr.eya.uwblink.AppContainer
 import fr.eya.uwblink.ui.Bluetooth.componets.BluetoothViewModel
+import fr.eya.uwblink.ui.MainActivity
 import fr.eya.uwblink.ui.chat.ChatScreen
 import fr.eya.uwblink.ui.control.ControlRoute
 import fr.eya.uwblink.ui.control.ControlViewModel
 import fr.eya.uwblink.ui.device.DeviceScreen
 import fr.eya.uwblink.ui.home.HomeRoute
 import fr.eya.uwblink.ui.home.HomeViewModel
+import fr.eya.uwblink.ui.nav.AppDestination.CHAT_ROUTE
 import fr.eya.uwblink.ui.nav.AppDestination.CONTROL_ROUTE
+import fr.eya.uwblink.ui.nav.AppDestination.DEVICE_ROUTE
 import fr.eya.uwblink.ui.send.SendRoute
 import fr.eya.uwblink.ui.send.SendViewModel
 import fr.eya.uwblink.ui.settings.SettingsRoute
 import fr.eya.uwblink.ui.settings.SettingsViewModel
+import fr.eya.uwblink.ui.welcomescreen.HelloScreen
+import fr.eya.uwblink.ui.welcomescreen.MainScreen
 
 
 @Composable
@@ -37,19 +43,26 @@ fun AppNavGraph(
     appContainer: AppContainer,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = AppDestination.DEVICE_ROUTE,
+    startDestination: String = AppDestination.SPLASH_ROUTE,
 
     ) {
     val viewModel = hiltViewModel<BluetoothViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
-    var TAG = "AppNavGraph"
     NavHost(
         navController = navController,
         startDestination = startDestination,
         modifier = modifier
     ) {
 
-
+        composable(AppDestination.SPLASH_ROUTE) {
+            SplashScreen(navController = navController, context = MainActivity)
+        }
+        composable(AppDestination.ON_BORDING_ROUTE) {
+            OnboardingScreen(navController = navController)
+        }
+        composable(AppDestination.Main_Route) {
+            MainScreen(appContainer = appContainer)
+        }
         composable(AppDestination.HOME_ROUTE) {
             val homeViewModel: HomeViewModel =
                 viewModel(
@@ -61,7 +74,7 @@ fun AppNavGraph(
             HomeRoute(homeViewModel = homeViewModel)
         }
 
-        composable(AppDestination.DEVICE_ROUTE) {
+        composable(DEVICE_ROUTE) {
 
             DeviceScreen(
                 state = state,
@@ -73,8 +86,7 @@ fun AppNavGraph(
 
                 )
         }
-        composable("Chat_Screen") {
-            Log.d(TAG, "Chat_Screen: State - $state")
+        composable(CHAT_ROUTE) {
             when {
                 state.isConnecting -> {
                     Column(
@@ -88,16 +100,23 @@ fun AppNavGraph(
                 }
 
                 state.isConnected -> {
-                    Log.d(TAG, "Chat_Screen: Connected")
 
-                    ChatScreen(state = state,
+                    ChatScreen(
+                        state = state,
                         OnDisconnect = viewModel::disconnectFromDevice,
                         OnSendMessage = viewModel::sendMessage,
                         navController = navController,
-                       )
+                    )
                 }
+
                 else -> {
-                    Log.d(TAG, "Chat_Screen: Not Connecting or Connected")
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(text = "You need to pair a device to chat ")
+                    }
                 }
             }
         }
@@ -114,6 +133,10 @@ fun AppNavGraph(
             //ControlRoute()
             ControlRoute(controlViewModel = controlViewModel)
 
+        }
+        composable(AppDestination.Choose_ROUTE)
+        {
+            HelloScreen(navController = navController)
         }
         composable(AppDestination.SEND_ROUTE) {
             val sendViewModel: SendViewModel =

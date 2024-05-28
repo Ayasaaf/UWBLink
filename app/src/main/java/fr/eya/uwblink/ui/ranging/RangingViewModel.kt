@@ -1,5 +1,6 @@
 package fr.eya.uwblink.ui.ranging
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -17,14 +18,18 @@ class RangingViewModel(private val uwbRangingControlSource: UwbRangingControlSou
     val uiState = _uiState.asStateFlow()
 
     init {
-        uwbRangingControlSource.isRunning.onEach { _uiState.update { it } }.launchIn(viewModelScope)
+        uwbRangingControlSource.isRunning.onEach {
+            Log.d("rangingRun", "isRunning state updated: $it")
+            _uiState.update { it } }.launchIn(viewModelScope)
     }
 
     fun startRanging() {
+        Log.d("RangingStart", "Starting ranging")
         uwbRangingControlSource.start()
     }
 
     fun stopRanging() {
+        Log.d("RangingStop", "Stopping ranging")
         uwbRangingControlSource.stop()
     }
 

@@ -2,6 +2,8 @@ package fr.eya.ranging
 /** a class that describe the uwb device */
 data class UwbEndPoint ( val id : String , val metadata : ByteArray){
     override fun equals(other: Any?): Boolean {
+
+        //This ensures that two devices with the same ID are considered equal.
         if (this === other) return true
         if (other !is UwbEndPoint) return false
         return id == other.id

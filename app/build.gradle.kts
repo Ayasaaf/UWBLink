@@ -22,6 +22,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+
+
     }
 
     buildTypes {
@@ -39,6 +42,8 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+
+
     }
 
     buildFeatures {
@@ -70,6 +75,8 @@ android {
             }
         }
     }
+
+
 
 }
 
@@ -134,7 +141,7 @@ dependencies {
     implementation("com.google.accompanist:accompanist-pager:0.12.0")
 
     // Use to implement UWB (ultra-wideband) on supported devices
-    implementation("androidx.core.uwb:uwb:1.0.0-alpha08")
+    implementation ("androidx.core.uwb:uwb:1.0.0-alpha05")
 
 
     //porto
@@ -149,19 +156,9 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.2.0")
 
 
+    implementation ("com.google.android.gms:play-services-location:21.2.0")
 
-    implementation ("com.google.android.gms:play-services-tasks:18.0.2")
-    implementation ("com.google.android.gms:play-services-nearby:18.5.0")
 
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
-
-    implementation ("com.google.truth:truth:1.1.3")
-    implementation ("com.google.guava:guava:31.1-jre")
-    implementation ("org.robolectric:robolectric:4.8.2")
-
-    implementation ("org.mockito.kotlin:mockito-kotlin:4.0.0")
-    implementation ("org.mockito:mockito-core:4.7.0")
-    implementation ("org.mockito:mockito-inline:4.7.0")
 
 }
 

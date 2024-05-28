@@ -31,11 +31,12 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import fr.eya.uwblink.R
 import fr.eya.uwblink.ui.MainActivity
+import fr.eya.uwblink.ui.nav.AppDestination
 import kotlinx.coroutines.delay
 
 @Composable
 
-fun SplashScreen(navController: NavController, context: MainActivity) {
+fun SplashScreen(navController: NavController, context: MainActivity.Companion) {
 
     val alpha = remember {
         Animatable(0f)
@@ -50,7 +51,7 @@ fun SplashScreen(navController: NavController, context: MainActivity) {
         if (!isOnboardingFinished) {
             navController.navigate("On_Boarding_Screen")
         } else {
-            navController.navigate("Hello_Screen")
+            navController.navigate(AppDestination.Choose_ROUTE)
         }
     }
 

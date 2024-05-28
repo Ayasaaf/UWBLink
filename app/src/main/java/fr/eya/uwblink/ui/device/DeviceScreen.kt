@@ -12,7 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import fr.eya.uwblink.R
 import fr.eya.uwblink.ui.Bluetooth.BluetoothUiState
+import fr.eya.uwblink.ui.nav.AppDestination
 import fr.eya.uwblink.uwbranging.BluetoothChat.domain.BluetoothDevice
 
 
@@ -44,7 +49,24 @@ fun DeviceScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
 
+
+            IconButton(onClick = {
+
+                navController.navigate(AppDestination.Choose_ROUTE)
+            }) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = "Disconnect"
+                )
+            }
+        }
 
         BluetoothDeviceList(
             context = LocalContext.current,

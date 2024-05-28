@@ -1,5 +1,6 @@
 package fr.eya.uwblink.ui.home
 
+import android.util.Log
 import androidx.core.uwb.RangingPosition
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -22,21 +23,21 @@ class HomeViewModel(uwbRangingControlSource: UwbRangingControlSource) : ViewMode
     private val endpointPositions = mutableMapOf<UwbEndPoint, RangingPosition>()
 
     private var isRanging = false
+
     private fun updateUiState(): HomeUiState {
-        return HomeUiStateImpl(
+        // Log the updated UI state content
+        val uiState = HomeUiStateImpl(
             endpoints
                 .mapNotNull { endpoint ->
-              endpointPositions[endpoint]?.let {
-                  position ->
-                    ConnectedEndpoint(
-                        endpoint,
-                        position
-                    )
-                }
-            }.toList(),
+                    endpointPositions[endpoint]?.let { position ->
+                        ConnectedEndpoint(endpoint, position)
+                    }
+                }.toList(),
             endpoints.filter { !endpointPositions.containsKey(it) }.toList(),
             isRanging
         )
+        Log.d("HomeViewModel", "Updated UI State: $uiState")
+        return uiState
     }
 
     val uiState = _uiState.asStateFlow()
@@ -45,32 +46,50 @@ class HomeViewModel(uwbRangingControlSource: UwbRangingControlSource) : ViewMode
         uwbRangingControlSource
             .observeRangingResults()
             .onEach { result ->
-                when (result) {
-                    is EndpointEvents.EndpointFound -> endpoints.add(result.endpoint)
-                    is EndpointEvents.UwbDisconnected -> endpointPositions.remove(result.endpoint)
-                    is EndpointEvents.PositionUpdated -> endpointPositions[result.endpoint] =
-                        result.position
-
-                    is EndpointEvents.EndpointLost -> {
-                        endpoints.remove(result.endpoint)
-
-                        endpointPositions.remove(result.endpoint)
+                try {
+                    when (result) {
+                        is EndpointEvents.EndpointFound -> {
+                            endpoints.add(result.endpoint)
+                            Log.d("HomeViewModel", "Endpoint Found: ${result.endpoint}")
+                        }
+                        is EndpointEvents.UwbDisconnected -> {
+                            endpointPositions.remove(result.endpoint)
+                            Log.d("HomeViewModel", "UwbDisconnected: ${result.endpoint}")
+                        }
+                        is EndpointEvents.PositionUpdated -> {
+                            endpointPositions[result.endpoint] = result.position
+                            Log.d("HomeViewModel", "Position Updated: ${result.endpoint}, ${result.position}")
+                        }
+                        is EndpointEvents.EndpointLost -> {
+                            endpoints.remove(result.endpoint)
+                            endpointPositions.remove(result.endpoint)
+                            Log.d("HomeViewModel", "Endpoint Lost: ${result.endpoint}")
+                        }
+                        else -> {
+                            Log.d("HomeViewModel", "Unknown event type: $result")
+                            return@onEach
+                        }
                     }
-
-                    else -> return@onEach
+                    _uiState.update { updateUiState() }
+                } catch (e: Exception) {
+                    Log.e("HomeViewModel", "Error processing ranging result: $result", e)
                 }
-                _uiState.update { updateUiState() }
             }
             .launchIn(viewModelScope)
 
         uwbRangingControlSource.isRunning
             .onEach { running ->
-                isRanging = running
-                if (!running) {
-                    endpoints.clear()
-                    endpointPositions.clear()
+                try {
+                    isRanging = running
+                    if (!running) {
+                        endpoints.clear()
+                        endpointPositions.clear()
+                    }
+                    _uiState.update { updateUiState() }
+                    Log.d("HomeViewModel", "Ranging state updated: isRanging = $isRanging")
+                } catch (e: Exception) {
+                    Log.e("HomeViewModel", "Error updating ranging state", e)
                 }
-                _uiState.update { updateUiState() }
             }
             .launchIn(CoroutineScope(Dispatchers.IO))
     }

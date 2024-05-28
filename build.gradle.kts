@@ -4,14 +4,13 @@
 
 
 buildscript {
-
+    repositories {
+        gradlePluginPortal()
+    }
     dependencies {
-        classpath ("com.google.dagger:hilt-android-gradle-plugin:2.51")
         classpath ("com.google.protobuf:protobuf-gradle-plugin:0.9.4")
-
     }
 }
-
 
 plugins {
     id ("com.android.application") version "8.2.2" apply false

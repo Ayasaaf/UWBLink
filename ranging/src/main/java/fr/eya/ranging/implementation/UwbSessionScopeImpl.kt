@@ -1,5 +1,6 @@
 package fr.eya.ranging.implementation
 
+import android.util.Log
 import androidx.core.uwb.RangingParameters
 import androidx.core.uwb.RangingResult
 import androidx.core.uwb.UwbAddress
@@ -68,19 +69,51 @@ internal class UwbSessionScopeImpl(
                 listOf(UwbDevice(event.endpointAddress)),
                 RangingParameters.RANGING_UPDATE_RATE_FREQUENT
             )
-        trySend(EndpointEvents.EndpointFound(event.endpoint))
-        return event.sessionScope.prepareSession(rangingParameters)
-    }
+        Log.d("processEndpointFound", "Created rangingParameters: $rangingParameters")
 
-    private fun ProducerScope<EndpointEvents>.sendResult(result: RangingResult) {
-        val endpoint =
-            if (localAddresses.contains(result.device.address)) localEndpoint
-            else remoteDeviceMap[result.device.address] ?: return
-        when (result) {
-            is RangingResult.RangingResultPosition ->
-                trySend(EndpointEvents.PositionUpdated(endpoint, result.position))
-            is RangingResult.RangingResultPeerDisconnected ->
-                trySend(EndpointEvents.UwbDisconnected(endpoint))
+        trySend(EndpointEvents.EndpointFound(event.endpoint))
+        Log.d("processEndpointFound", "Sent EndpointFound event for: ${event.endpoint}")
+
+        return event.sessionScope.prepareSession(rangingParameters).also {
+            Log.d("processEndpointFound", "Preparing session with rangingParameters")
         }
     }
-}
+
+
+    private fun ProducerScope<EndpointEvents>.sendResult(result: RangingResult) {
+        Log.d("sendResult", "Processing ranging result: $result")
+
+        val endpoint =
+            if (localAddresses.contains(result.device.address)) {
+                Log.d("sendResult", "Result device is local endpoint: ${result.device.address}")
+                localEndpoint
+            } else {
+                remoteDeviceMap[result.device.address]?.also {
+                    Log.d(
+                        "sendResult",
+                        "Result device found in remoteDeviceMap: ${result.device.address}"
+                    )
+                } ?: run {
+                    Log.d(
+                        "sendResult",
+                        "Result device not found in remoteDeviceMap, ignoring: ${result.device.address}"
+                    )
+                    return
+                }
+            }
+
+        when (result) {
+            is RangingResult.RangingResultPosition -> {
+                Log.d(
+                    "sendResult",
+                    "RangingResultPosition: ${result.position} for endpoint: $endpoint"
+                )
+                trySend(EndpointEvents.PositionUpdated(endpoint, result.position))
+            }
+
+            is RangingResult.RangingResultPeerDisconnected -> {
+                Log.d("sendResult", "RangingResultPeerDisconnected for endpoint: $endpoint")
+                trySend(EndpointEvents.UwbDisconnected(endpoint))
+            }
+        }
+    }}

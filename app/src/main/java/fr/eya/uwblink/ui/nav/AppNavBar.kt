@@ -1,5 +1,6 @@
 package fr.eya.uwblink.ui.nav
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -16,13 +17,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import fr.eya.uwblink.AppContainer
 import fr.eya.uwblink.ui.Screen
 import fr.eya.uwblink.ui.ranging.RangingControlIcon
-
 
 @Composable
 fun AppNavBar(
@@ -32,16 +33,21 @@ fun AppNavBar(
     isRanging: Boolean,
     startRanging: () -> Unit,
     stopRanging: () -> Unit,
-    CurrentDestination: String?
+) {
+    val context = LocalContext.current
 
-    ) {
+    // Check onboarding completion from SharedPreferences
+    val sharedPreferences = context.getSharedPreferences("On_Boarding_Screen", Context.MODE_PRIVATE)
+    val isOnboardingFinished = sharedPreferences.getBoolean("isFinished", false)
+
+
     val navController = rememberNavController()
-    //ranging state to store the state of the ranging button
+    // Ranging state to store the state of the ranging button
     val rangingState = remember { mutableStateOf(isRanging) }
-    val showRangingFab = CurrentDestination == Screen.Home.route // Check if the current destination is the home screen
 
-        Scaffold(
-            bottomBar = {
+    Scaffold(
+        bottomBar = {
+            if (isOnboardingFinished) { // Conditionally show NavigationBar
                 NavigationBar {
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentDestination = navBackStackEntry?.destination
@@ -54,10 +60,16 @@ fun AppNavBar(
                         )
                     }
                 }
-            },
-            floatingActionButtonPosition = FabPosition.End,
-            floatingActionButton = {
-                if (showRangingFab) {
+            }
+        },
+        floatingActionButtonPosition = FabPosition.End,
+        floatingActionButton = {
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentDestination = navBackStackEntry?.destination
+            val showFloatingActionButton =  // Check if it's the home screen
+                currentDestination?.hierarchy?.any { it.route == Screen.Home.route } == true // Conditionally show FloatingActionButton{
+            if (showFloatingActionButton && isOnboardingFinished) {
+
                 Column {
                     FloatingActionButton(
                         shape = CircleShape,
@@ -73,20 +85,19 @@ fun AppNavBar(
                             }
                         }
                     }
-
-                    }
-
-                } }
-
-
-        ) { innerPadding ->
-            AppNavGraph(
-                appContainer = appContainer,
-                modifier = Modifier.padding(innerPadding),
-                navController = navController
-            )
+                }
+            }
         }
+    ) { innerPadding ->
+        AppNavGraph(
+            appContainer = appContainer,
+            modifier = Modifier.padding(innerPadding),
+            navController = navController
+        )
     }
+}
+
 
 private val items =
     listOf(Screen.Device, Screen.Home, Screen.Chat, Screen.Control, Screen.Send, Screen.Settings)
+
