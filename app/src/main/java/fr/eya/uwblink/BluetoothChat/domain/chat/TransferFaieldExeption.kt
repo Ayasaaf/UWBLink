@@ -16,7 +16,7 @@
  * limitations under the License.
  *
  */
-package fr.eya.uwblink.uwbranging.BluetoothChat.domain.chat
+package fr.eya.uwblink.BluetoothChat.domain.chat
 
 import java.io.IOException
 

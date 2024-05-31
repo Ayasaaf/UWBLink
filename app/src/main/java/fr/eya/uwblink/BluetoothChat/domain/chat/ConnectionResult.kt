@@ -17,9 +17,9 @@
  * limitations under the License.
  *
  */
-package fr.eya.uwblink.uwbranging.BluetoothChat.domain.chat
+package fr.eya.uwblink.BluetoothChat.domain.chat
 
-import fr.eya.uwblink.uwbranging.BluetoothChat.domain.BluetoothMessage
+import fr.eya.uwblink.BluetoothChat.domain.BluetoothMessage
 
 sealed interface ConnectionResult {
     object ConnectionEstablished : ConnectionResult

@@ -17,10 +17,10 @@
  * limitations under the License.
  *
  */
-package fr.eya.uwblink.uwbranging.BluetoothChat.domain.chat
+package fr.eya.uwblink.BluetoothChat.domain.chat
 
-import fr.eya.uwblink.uwbranging.BluetoothChat.domain.BluetoothDevice
-import fr.eya.uwblink.uwbranging.BluetoothChat.domain.BluetoothMessage
+import fr.eya.uwblink.BluetoothChat.domain.BluetoothDevice
+import fr.eya.uwblink.BluetoothChat.domain.BluetoothMessage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -4212,6 +4212,7 @@ string mtrl_timepicker_confirm
 string nav_app_bar_navigate_up_description
 string nav_app_bar_open_drawer_description
 string navigation_menu
+string nearby_device_type_tablet
 string next
 string not_selected
 string off

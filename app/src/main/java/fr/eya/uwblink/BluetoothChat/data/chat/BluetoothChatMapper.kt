@@ -16,9 +16,9 @@
  * limitations under the License.
  *
  */
-package fr.eya.uwblink.uwbranging.BluetoothChat.data.chat
+package fr.eya.uwblink.BluetoothChat.data.chat
 
-import fr.eya.uwblink.uwbranging.BluetoothChat.domain.BluetoothMessage
+import fr.eya.uwblink.BluetoothChat.domain.BluetoothMessage
 
 fun String.toBluetoothMessage(isFromLocalUser: Boolean): BluetoothMessage {
     val name = substringBeforeLast("#")

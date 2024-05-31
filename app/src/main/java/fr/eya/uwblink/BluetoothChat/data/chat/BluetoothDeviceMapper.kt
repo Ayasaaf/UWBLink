@@ -16,13 +16,13 @@
  * limitations under the License.
  *
  */
-package fr.eya.uwblink.uwbranging.BluetoothChat.data.chat
+package fr.eya.uwblink.BluetoothChat.data.chat
 
 
 
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
-import fr.eya.uwblink.uwbranging.BluetoothChat.domain.BluetoothDeviceDomain
+import fr.eya.uwblink.BluetoothChat.domain.BluetoothDeviceDomain
 
 
 @SuppressLint("MissingPermission")

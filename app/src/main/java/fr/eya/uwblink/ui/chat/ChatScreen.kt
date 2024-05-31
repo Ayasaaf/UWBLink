@@ -27,7 +27,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import fr.eya.uwblink.ui.Bluetooth.BluetoothUiState
+import fr.eya.uwblink.BluetoothChat.BluetoothUiState
 
 
 @Composable

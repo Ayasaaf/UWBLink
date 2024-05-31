@@ -189,6 +189,7 @@
     <string msgid="6301633601645100427" name="nav_app_bar_navigate_up_description">"Omhoog navigeren"</string>
     <string msgid="7456070600745802113" name="nav_app_bar_open_drawer_description">"Zijmenu openen"</string>
     <string msgid="542007171693138492" name="navigation_menu">"Navigatiemenu"</string>
+    <string name="nearby_device_type_tablet">tablet</string>
     <string msgid="6610465462668679431" name="not_selected">"Niet geselecteerd"</string>
     <string msgid="875452955155264703" name="off">"Uit"</string>
     <string msgid="8655164131929253426" name="on">"Aan"</string>

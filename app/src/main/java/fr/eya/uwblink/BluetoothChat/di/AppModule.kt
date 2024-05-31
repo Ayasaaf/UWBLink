@@ -16,7 +16,7 @@
  * limitations under the License.
  *
  */
-package fr.eya.uwblink.uwbranging.BluetoothChat.di
+package fr.eya.uwblink.BluetoothChat.di
 
 import android.content.Context
 import dagger.Module
@@ -24,8 +24,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import fr.eya.uwblink.uwbranging.BluetoothChat.data.chat.AndroidBluetoothController
-import fr.eya.uwblink.uwbranging.BluetoothChat.domain.chat.BluetoothController
+import fr.eya.uwblink.BluetoothChat.data.chat.AndroidBluetoothController
+import fr.eya.uwblink.BluetoothChat.domain.chat.BluetoothController
 import javax.inject.Singleton
 
 

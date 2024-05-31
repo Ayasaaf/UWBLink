@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import fr.eya.uwblink.uwbranging.BluetoothChat.domain.BluetoothMessage
+import fr.eya.uwblink.BluetoothChat.domain.BluetoothMessage
 import fr.eya.uwblink.ui.theme.MyAppTheme
 import fr.eya.uwblink.ui.theme.OldRose
 import fr.eya.uwblink.ui.theme.Vanilla

@@ -1,6 +1,7 @@
 package fr.eya.uwblink.ui.nav
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -78,10 +79,13 @@ fun AppNavBar(
                     ) {
                         RangingControlIcon(selected = rangingState.value) {
                             rangingState.value = it
+                            Log.d("AppNavBar", "Ranging button clicked: $it")
                             if (it) {
                                 startRanging()
+                                Log.d("AppNavBar", "Starting ranging")
                             } else {
                                 stopRanging()
+                                Log.d("AppNavBar", "Stopping ranging")
                             }
                         }
                     }

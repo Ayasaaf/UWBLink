@@ -44,9 +44,9 @@ import dagger.hilt.android.scopes.ViewScoped;
 import dagger.hilt.components.SingletonComponent;
 import dagger.hilt.internal.GeneratedComponent;
 import dagger.hilt.migration.DisableInstallInCheck;
-import fr.eya.uwblink.ui.Bluetooth.componets.BluetoothViewModel_HiltModules;
+import fr.eya.uwblink.BluetoothChat.BluetoothViewModel_HiltModules;
+import fr.eya.uwblink.BluetoothChat.di.AppModule;
 import fr.eya.uwblink.ui.MainActivity_GeneratedInjector;
-import fr.eya.uwblink.uwbranging.BluetoothChat.di.AppModule;
 import javax.annotation.Generated;
 import javax.inject.Singleton;
 

@@ -30,11 +30,11 @@ import dagger.internal.KeepFieldType;
 import dagger.internal.LazyClassKeyMap;
 import dagger.internal.Preconditions;
 import dagger.internal.Provider;
-import fr.eya.uwblink.ui.Bluetooth.componets.BluetoothViewModel;
-import fr.eya.uwblink.ui.Bluetooth.componets.BluetoothViewModel_HiltModules;
+import fr.eya.uwblink.BluetoothChat.BluetoothViewModel;
+import fr.eya.uwblink.BluetoothChat.BluetoothViewModel_HiltModules;
+import fr.eya.uwblink.BluetoothChat.di.AppModule_ProvideBluetoothControllerFactory;
+import fr.eya.uwblink.BluetoothChat.domain.chat.BluetoothController;
 import fr.eya.uwblink.ui.MainActivity;
-import fr.eya.uwblink.uwbranging.BluetoothChat.di.AppModule_ProvideBluetoothControllerFactory;
-import fr.eya.uwblink.uwbranging.BluetoothChat.domain.chat.BluetoothController;
 import java.util.Map;
 import java.util.Set;
 import javax.annotation.Generated;
@@ -367,7 +367,7 @@ public final class DaggerHelloUwbApplication_HiltComponents_SingletonC {
 
     @Override
     public Map<Class<?>, Boolean> getViewModelKeys() {
-      return LazyClassKeyMap.<Boolean>of(ImmutableMap.<String, Boolean>of(LazyClassKeyProvider.fr_eya_uwblink_ui_Bluetooth_componets_BluetoothViewModel, BluetoothViewModel_HiltModules.KeyModule.provide()));
+      return LazyClassKeyMap.<Boolean>of(ImmutableMap.<String, Boolean>of(LazyClassKeyProvider.fr_eya_uwblink_BluetoothChat_BluetoothViewModel, BluetoothViewModel_HiltModules.KeyModule.provide()));
     }
 
     @Override
@@ -391,10 +391,10 @@ public final class DaggerHelloUwbApplication_HiltComponents_SingletonC {
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
-      static String fr_eya_uwblink_ui_Bluetooth_componets_BluetoothViewModel = "fr.eya.uwblink.ui.Bluetooth.componets.BluetoothViewModel";
+      static String fr_eya_uwblink_BluetoothChat_BluetoothViewModel = "fr.eya.uwblink.BluetoothChat.BluetoothViewModel";
 
       @KeepFieldType
-      BluetoothViewModel fr_eya_uwblink_ui_Bluetooth_componets_BluetoothViewModel2;
+      BluetoothViewModel fr_eya_uwblink_BluetoothChat_BluetoothViewModel2;
     }
   }
 
@@ -425,7 +425,7 @@ public final class DaggerHelloUwbApplication_HiltComponents_SingletonC {
 
     @Override
     public Map<Class<?>, javax.inject.Provider<ViewModel>> getHiltViewModelMap() {
-      return LazyClassKeyMap.<javax.inject.Provider<ViewModel>>of(ImmutableMap.<String, javax.inject.Provider<ViewModel>>of(LazyClassKeyProvider.fr_eya_uwblink_ui_Bluetooth_componets_BluetoothViewModel, ((Provider) bluetoothViewModelProvider)));
+      return LazyClassKeyMap.<javax.inject.Provider<ViewModel>>of(ImmutableMap.<String, javax.inject.Provider<ViewModel>>of(LazyClassKeyProvider.fr_eya_uwblink_BluetoothChat_BluetoothViewModel, ((Provider) bluetoothViewModelProvider)));
     }
 
     @Override
@@ -435,10 +435,10 @@ public final class DaggerHelloUwbApplication_HiltComponents_SingletonC {
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
-      static String fr_eya_uwblink_ui_Bluetooth_componets_BluetoothViewModel = "fr.eya.uwblink.ui.Bluetooth.componets.BluetoothViewModel";
+      static String fr_eya_uwblink_BluetoothChat_BluetoothViewModel = "fr.eya.uwblink.BluetoothChat.BluetoothViewModel";
 
       @KeepFieldType
-      BluetoothViewModel fr_eya_uwblink_ui_Bluetooth_componets_BluetoothViewModel2;
+      BluetoothViewModel fr_eya_uwblink_BluetoothChat_BluetoothViewModel2;
     }
 
     private static final class SwitchingProvider<T> implements Provider<T> {
@@ -462,7 +462,7 @@ public final class DaggerHelloUwbApplication_HiltComponents_SingletonC {
       @Override
       public T get() {
         switch (id) {
-          case 0: // fr.eya.uwblink.ui.Bluetooth.componets.BluetoothViewModel 
+          case 0: // fr.eya.uwblink.BluetoothChat.BluetoothViewModel 
           return (T) new BluetoothViewModel(singletonCImpl.provideBluetoothControllerProvider.get());
 
           default: throw new AssertionError(id);
@@ -591,7 +591,7 @@ public final class DaggerHelloUwbApplication_HiltComponents_SingletonC {
       @Override
       public T get() {
         switch (id) {
-          case 0: // fr.eya.uwblink.uwbranging.BluetoothChat.domain.chat.BluetoothController 
+          case 0: // fr.eya.uwblink.BluetoothChat.domain.chat.BluetoothController 
           return (T) AppModule_ProvideBluetoothControllerFactory.provideBluetoothController(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule));
 
           default: throw new AssertionError(id);

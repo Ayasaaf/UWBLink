@@ -26,10 +26,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import fr.eya.uwblink.BluetoothChat.BluetoothUiState
+import fr.eya.uwblink.BluetoothChat.domain.BluetoothDevice
 import fr.eya.uwblink.R
-import fr.eya.uwblink.ui.Bluetooth.BluetoothUiState
 import fr.eya.uwblink.ui.nav.AppDestination
-import fr.eya.uwblink.uwbranging.BluetoothChat.domain.BluetoothDevice
 
 
 @Composable

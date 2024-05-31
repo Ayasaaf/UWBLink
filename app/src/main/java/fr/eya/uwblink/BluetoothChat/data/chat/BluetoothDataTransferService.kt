@@ -1,9 +1,9 @@
-package fr.eya.uwblink.uwbranging.BluetoothChat.data.chat
+package fr.eya.uwblink.BluetoothChat.data.chat
 
 import android.bluetooth.BluetoothSocket
 import android.util.Log
-import fr.eya.uwblink.uwbranging.BluetoothChat.domain.BluetoothMessage
-import fr.eya.uwblink.uwbranging.BluetoothChat.domain.chat.TransferFailedException
+import fr.eya.uwblink.BluetoothChat.domain.BluetoothMessage
+import fr.eya.uwblink.BluetoothChat.domain.chat.TransferFailedException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

@@ -1,5 +1,6 @@
 package fr.eya.ranging.implementation
 
+import android.util.Log
 import androidx.core.uwb.UwbAddress
 import androidx.core.uwb.UwbControllerSessionScope
 import com.google.common.primitives.Shorts
@@ -20,10 +21,14 @@ internal class NearByControllerConnector(
 ) : NearbyConnector(connections) {
 
     override fun prepareEventFlow(): Flow<NearbyEvent> {
-        return connections.startDiscovery()
+        return connections.startDiscovery().also { flow ->
+            Log.i("NearByControllerConnector", "Starting Nearby discovery")
+        }
     }
 
-    override suspend fun processEndpointConnected(endpointId: String) {}
+    override suspend fun processEndpointConnected(endpointId: String) {
+        Log.i("NearByControllerConnector", "Endpoint connected: $endpointId")
+    }
 
     override suspend fun processUwbSessionInfo(
         endpointId: String,
@@ -38,12 +43,14 @@ internal class NearByControllerConnector(
         }
         val endpoint = UwbEndPoint(sessionInfo.id, sessionInfo.metadata.toByteArray())
         addEndPoint(endpointId, endpoint)
+
         val sessionScope = sessionScopeCreator()
         val sessionId = Random.nextInt()
         val sessionKeyInfo = Random.nextBytes(8)
         val endpointAddress = UwbAddress(Shorts.toByteArray(sessionInfo.localAddress.toShort()))
         val localAddress = sessionScope.localAddress
         val complexChannel = sessionScope.uwbComplexChannel
+
         val endpointFoundEvent =
             UwbOobEvent.UwbEndPointFound(
                 endpoint,
@@ -81,6 +88,8 @@ internal class NearByControllerConnector(
                 .build()
                 .toByteArray()
         )
+        Log.i("NearByControllerConnector", "Sending Oob message to endpoint: $endpointId ")
+        Log.d("Parameters" , "$sessionInfo ${complexChannel.channel} $configId $sessionId ${complexChannel.preambleIndex}" )
         return endpointFoundEvent
     }
 }

@@ -16,7 +16,7 @@
  *
  */
 
-package fr.eya.uwblink.uwbranging.BluetoothChat.data.chat
+package fr.eya.uwblink.BluetoothChat.data.chat
 
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
@@ -28,10 +28,11 @@ import android.content.Context
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.util.Log
-import fr.eya.uwblink.uwbranging.BluetoothChat.domain.BluetoothDeviceDomain
-import fr.eya.uwblink.uwbranging.BluetoothChat.domain.BluetoothMessage
-import fr.eya.uwblink.uwbranging.BluetoothChat.domain.chat.BluetoothController
-import fr.eya.uwblink.uwbranging.BluetoothChat.domain.chat.ConnectionResult
+import fr.eya.uwblink.BluetoothChat.domain.BluetoothDeviceDomain
+import fr.eya.uwblink.BluetoothChat.domain.BluetoothMessage
+import fr.eya.uwblink.BluetoothChat.domain.chat.BluetoothController
+import fr.eya.uwblink.BluetoothChat.domain.chat.ConnectionResult
+
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -85,14 +86,12 @@ class AndroidBluetoothController(
         get() = _errors
 
     //update the list of devices when a new device is scanned
-    private val FoundDeviceReciever = FoundDeviceReciever { device ->
+    private val FoundDeviceReciever =  FoundDeviceReciever { device ->
         _scannedDevices.update { devices ->
             val NewDevice = device.toBluetoothDeviceDomain()
             if (NewDevice in devices) devices else devices + NewDevice
 
-        }
-
-    }
+        }}
 
 
     // update the state to is connected for a device scanned when it is paired
@@ -184,13 +183,13 @@ class AndroidBluetoothController(
 
     }
 
-    override fun ConnectToDevice(Device: BluetoothDeviceDomain): Flow<ConnectionResult> {
+    override fun ConnectToDevice(device: BluetoothDeviceDomain): Flow<ConnectionResult> {
         return flow {
             if (!hasPermission(android.Manifest.permission.BLUETOOTH_CONNECT)) {
                 throw SecurityException("NO_BLUETOOTH_CONNECT_PERMISSION")
             }
 
-            currentClientSocket = bluetoothAdapter?.getRemoteDevice(Device.address)
+            currentClientSocket = bluetoothAdapter?.getRemoteDevice(device.address)
                 ?.createRfcommSocketToServiceRecord(UUID.fromString(SERVICE_UUID))
             Stop()
 

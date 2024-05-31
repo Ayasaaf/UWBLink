@@ -96,9 +96,9 @@ dependencies {
 
 
 //nearbyconnection Api
-    implementation ("com.google.android.gms:play-services-nearby:18.5.0")
+    implementation ("com.google.android.gms:play-services-nearby:19.2.0")
 
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
     implementation ("com.google.protobuf:protobuf-javalite:3.21.5")
     implementation ("com.google.protobuf:protobuf-kotlin-lite:3.21.5")

@@ -6,9 +6,11 @@ import fr.eya.uwblink.ui.theme.MyAppTheme
 import fr.eya.uwblink.ui.welcomescreen.MainScreen
 
 @Composable
-fun HelloUwbApp(appContainer: AppContainer) {
 
-  MyAppTheme {
-        MainScreen(appContainer = appContainer)
-    }
-}
+
+    fun HelloUwbApp(appContainer: AppContainer) {
+
+        MyAppTheme {
+          MainScreen(appContainer = appContainer)
+            }
+        }

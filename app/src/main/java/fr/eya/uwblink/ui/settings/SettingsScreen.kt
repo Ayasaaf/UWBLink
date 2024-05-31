@@ -41,16 +41,6 @@ fun SettingsScreen(
 ) {
     CenterAlignedTopAppBar(
         title = { Text("Device Settings") },
-//        actions = {
-//            val icon = if (isRanging) Icons.Filled.NearMe else Icons.Filled.NearMeDisabled
-//            val iconColor = if (isRanging) Color.Green else Color.DarkGray
-//            Image(
-//                imageVector = icon,
-//                colorFilter = ColorFilter.tint(iconColor),
-//                contentDescription = null
-//            )
-//        },
-//        scrollBehavior = scrollBehavior,
         modifier = modifier
     )
 

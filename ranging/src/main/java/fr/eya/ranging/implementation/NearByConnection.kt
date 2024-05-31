@@ -16,6 +16,7 @@ import com.google.android.gms.nearby.connection.Payload
 import com.google.android.gms.nearby.connection.PayloadCallback
 import com.google.android.gms.nearby.connection.PayloadTransferUpdate
 import com.google.android.gms.nearby.connection.Strategy
+import fr.eya.ranging.UwbEndPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -25,30 +26,38 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-private const val CONNECTION_SERVICE_ID = "UWBLink"
-private const val CONNECTION_NAME = "UWBLink"
+private const val CONNECTION_SERVICE_ID = "0x0000002A"
+private const val CONNECTION_NAME = "0x0000002A"
 
 internal class NearByConnection(
-    context: Context,
+    context: Context ,
     dispatcher: CoroutineDispatcher,
     private val connectionsClient: ConnectionsClient = Nearby.getConnectionsClient(context),
-)  {
+) {
     private val coroutineScope =
-        CoroutineScope(dispatcher + Job() + CoroutineExceptionHandler { _, e ->
-            Log.e(
-                "NearbyConnections",
-                "Connection Error",
-                e
-            )
-        })
+        CoroutineScope(
+            dispatcher +
+                    Job() +
+                    CoroutineExceptionHandler { _, e ->
+                        Log.e(
+                            "NearbyConnections",
+                            "Connection Error",
+                            e
+                        )
+                    }
+        )
 
     //connection Callbacks for controller and Controllee
     private val connectionLifecycleCallback =
         object : ConnectionLifecycleCallback() {
             override fun onConnectionInitiated(endPointId: String, connectionInfo: ConnectionInfo) {
+                Nearby.getConnectionsClient(context).stopAdvertising()
+                Nearby.getConnectionsClient(context).stopDiscovery()
+                val endpoint = UwbEndPoint(endPointId, connectionInfo.endpointInfo)
                 Log.d("NearbyConnections", "onConnectionInitiated: $endPointId $connectionInfo")
                 coroutineScope.launch {
-                    connectionsClient.acceptConnection(endPointId, payloadCallback).await()
+                    Nearby.getConnectionsClient(context)
+                        .acceptConnection(endPointId, payloadCallback).addOnSuccessListener { }
                     Log.d("NearbyConnections", "Connection accepted: $endPointId")
 
                 }
@@ -61,56 +70,79 @@ internal class NearByConnection(
                 )
 
 
+                when (result.status.statusCode) {
+                    ConnectionsStatusCodes.STATUS_OK -> {
+                        Nearby.getConnectionsClient(context).stopAdvertising()
+                        Nearby.getConnectionsClient(context).stopDiscovery()
+                        Log.d(
+                            "NearbyConnection",
+                            "Connection established with $endPointId"
+                        ) // Log for debugging (optional)
+                    }
+
+                    ConnectionsStatusCodes.STATUS_CONNECTION_REJECTED -> {
+                        Log.w(
+                            "NearbyConnection",
+                            "Connection rejected by $endPointId"
+                        ) // Log for debugging (optional)
+                        // Handle connection rejected scenario (optional)
+                    }
+
+                    ConnectionsStatusCodes.STATUS_ERROR -> {
+                        Log.e(
+                            "NearbyConnection",
+                            "Connection error with $endPointId",
+                        ) // Log error details (optional)
+                        // Handle connection error scenario (optional)
+                    }
+                }
                 if (result.status.statusCode == ConnectionsStatusCodes.STATUS_OK) {
-                    Log.d("NearbyConnections", "Connection successful: $endPointId")
-
-                    dispatchEvent(NearbyEvent.EndpointLost(endPointId))
-                }
-                else {
-                    Log.d("NearbyConnections", "Connection failed: $endPointId, Status Code: ${result.status.statusCode}")
-                    dispatchEvent(NearbyEvent.EndpointLost(endPointId))
+                    dispatchEvent(NearbyEvent.EndpointConnected(endPointId))
+                    Log.d("connected" , "endpointconnected $endPointId")
                 }
             }
 
 
-            override fun onDisconnected(endpointId: String) {
-                Log.d("NearbyConnections", "onDisconnected: $endpointId")
+            override fun onDisconnected(endPointId: String) {
+                Log.d("NearbyConnections", "onDisconnected: $endPointId")
 
-                dispatchEvent(NearbyEvent.EndpointLost(endpointId))
+                dispatchEvent(NearbyEvent.EndpointLost(endPointId))
             }
         }
-    private val payloadCallback =
-        object : PayloadCallback() {
-            override fun onPayloadReceived(endpointId: String, payload: Payload) {
-                Log.d("onPayloadReceived", "Payload received from endpoint: $endpointId")
+    private val payloadCallback = object : PayloadCallback() {
+        override fun onPayloadReceived(endpointId: String, payload: Payload) {
+            // Log received payload details
+            Log.d("NearbyConnection", "onPayloadReceived: endpointId=$endpointId, payload=$payload")
 
-                val bytes = payload.asBytes()
-                if (bytes == null) {
-                    Log.d("onPayloadReceived", "Payload is null, returning")
-                    return
-                }
-                Log.d("onPayloadReceived", "Payload size: ${bytes.size} bytes")
-                dispatchEvent(NearbyEvent.PayloadReceived(endpointId, bytes))
+            // Retrieve connection using endpoint ID and call onReceive
+            val bytes = payload.asBytes()
+            if (bytes == null) {
+                Log.d("onPayloadReceived", "Payload is null, returning")
+                return
             }
-
-            override fun onPayloadTransferUpdate(
-                endpointId: String,
-                update: PayloadTransferUpdate
-            ) {
-            }
+            Log.d("onPayloadReceived", "Payload size: ${bytes.size} bytes")
+            dispatchEvent(NearbyEvent.PayloadReceived(endpointId, bytes))
         }
+
+
+        override fun onPayloadTransferUpdate(endpointId: String, update: PayloadTransferUpdate) {
+            // Log payload transfer update details
+            Log.d(
+                "NearbyConnection",
+                "onPayloadTransferUpdate: endpointId=$endpointId, update=$update"
+            )
+        }
+    }
+
     private val endpointDiscoveryCallback =
         object : EndpointDiscoveryCallback() {
-            override fun onEndpointFound(endPointId: String, info: DiscoveredEndpointInfo) {
-                Log.d("NearbyConnections", "onEndpointFound: $endPointId")
 
-                coroutineScope.launch {
-                    connectionsClient.requestConnection(
-                        CONNECTION_NAME,
-                        endPointId,
-                        connectionLifecycleCallback
-                    )
-                }
+            override fun onEndpointFound(endPointId: String, info: DiscoveredEndpointInfo) {
+                val endpoint = UwbEndPoint(endPointId, info.endpointInfo)
+                Nearby.getConnectionsClient(context)
+                    .requestConnection(CONNECTION_NAME, endpoint.id, connectionLifecycleCallback)
+                    .addOnSuccessListener { }
+                Log.d("NearbyConnections", "onEndpointFound: $endPointId")
             }
 
             override fun onEndpointLost(endPointId: String) {
@@ -120,10 +152,24 @@ internal class NearByConnection(
 
         }
 
+
     fun sendPayload(endpointId: String, bytes: ByteArray) {
+
+
+        // Log sending attempt with endpoint ID and payload size
+        Log.d(
+            "NearbyConnection",
+            "Sending payload to endpoint: $endpointId, size: ${bytes.size} bytes"
+        )
+
         coroutineScope.launch {
             connectionsClient.sendPayload(endpointId, Payload.fromBytes(bytes)).await()
         }
+
+        // Log successful sending
+        Log.d("NearbyConnection", "Payload sent successfully to endpoint: $endpointId")
+
+
     }
 
     private var dispatchEvent: (event: NearbyEvent) -> Unit = {}
@@ -188,4 +234,5 @@ abstract class NearbyEvent private constructor() {
     /** An event that notifies a UWB device is lost. */
     data class PayloadReceived(override val endpointId: String, val payload: ByteArray) :
         NearbyEvent()
+
 }

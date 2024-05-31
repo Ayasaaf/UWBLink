@@ -16,7 +16,7 @@
  * limitations under the License.
  *
  */
-package fr.eya.uwblink.uwbranging.BluetoothChat.domain
+package fr.eya.uwblink.BluetoothChat.domain
 
 typealias BluetoothDeviceDomain = BluetoothDevice
 

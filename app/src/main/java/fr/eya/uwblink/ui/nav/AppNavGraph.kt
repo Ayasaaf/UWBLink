@@ -19,7 +19,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import fr.eya.uwblink.AppContainer
-import fr.eya.uwblink.ui.Bluetooth.componets.BluetoothViewModel
+import fr.eya.uwblink.BluetoothChat.BluetoothViewModel
 import fr.eya.uwblink.ui.MainActivity
 import fr.eya.uwblink.ui.chat.ChatScreen
 import fr.eya.uwblink.ui.control.ControlRoute
@@ -60,9 +60,6 @@ fun AppNavGraph(
         composable(AppDestination.ON_BORDING_ROUTE) {
             OnboardingScreen(navController = navController)
         }
-        composable(AppDestination.Main_Route) {
-            MainScreen(appContainer = appContainer)
-        }
         composable(AppDestination.HOME_ROUTE) {
             val homeViewModel: HomeViewModel =
                 viewModel(
@@ -73,7 +70,9 @@ fun AppNavGraph(
                 )
             HomeRoute(homeViewModel = homeViewModel)
         }
-
+composable(AppDestination.Main_Route){
+    MainScreen(appContainer = appContainer)
+}
         composable(DEVICE_ROUTE) {
 
             DeviceScreen(

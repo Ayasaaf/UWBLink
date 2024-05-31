@@ -28,13 +28,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.hilt.navigation.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import fr.eya.uwblink.HelloUwbApplication
-import fr.eya.uwblink.ui.Bluetooth.componets.BluetoothViewModel
 
 
 private const val PERMISSION_REQUEST_CODE = 1234
@@ -52,28 +47,7 @@ class MainActivity : ComponentActivity() {
         (application as HelloUwbApplication).initContainer {
             runOnUiThread {
                 setContent {
-                    val viewModel = hiltViewModel<BluetoothViewModel>()
-                    val state by viewModel.state.collectAsState()
 
-
-                    LaunchedEffect(key1 = state.ErrorMessage) {
-                        state.ErrorMessage?.let { message ->
-                            Toast.makeText(
-                                applicationContext,
-                                message,
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    }
-                    LaunchedEffect(key1 = state.isConnected) {
-                        if (state.isConnected) {
-                            Toast.makeText(
-                                applicationContext,
-                                "You're connected!",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    }
 
                     HelloUwbApp(
                         (application as HelloUwbApplication).container

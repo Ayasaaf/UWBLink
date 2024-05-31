@@ -9,17 +9,14 @@ import fr.eya.uwblink.ui.nav.AppNavBar
 import fr.eya.uwblink.ui.ranging.RangingViewModel
 
 @Composable
-fun MainScreen( appContainer: AppContainer) {
+fun MainScreen(appContainer: AppContainer) {
     val rangingViewModel: RangingViewModel =
         viewModel(factory = RangingViewModel.provideFactory(appContainer.rangingResultSource))
     val uiState by rangingViewModel.uiState.collectAsState()
-
     AppNavBar(
         appContainer = appContainer,
         isRanging = uiState,
-
         startRanging = { rangingViewModel.startRanging() },
-
-        stopRanging = { rangingViewModel.stopRanging() },
+        stopRanging = { rangingViewModel.stopRanging() }
     )
 }

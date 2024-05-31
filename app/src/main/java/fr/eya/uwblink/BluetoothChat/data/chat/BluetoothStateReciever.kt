@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-package fr.eya.uwblink.uwbranging.BluetoothChat.data.chat
+package fr.eya.uwblink.BluetoothChat.data.chat
 
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver

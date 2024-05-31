@@ -156,7 +156,6 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.2.0")
 
 
-    implementation ("com.google.android.gms:play-services-location:21.2.0")
 
 
 

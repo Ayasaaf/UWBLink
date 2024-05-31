@@ -1,6 +1,7 @@
 package fr.eya.uwblink.uwbranging.data
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.Serializer
@@ -30,24 +31,35 @@ internal class SettingsStoreImpl(
         MutableStateFlow(SettingsSerializer.defaultValue)
 
     init {
+        Log.d(TAG, "Initializing SettingsStoreImpl")
 
         context.settingsDataStore.data
-            .onEach { settings -> (appSettings as MutableStateFlow<AppSettings>).update { settings } }
+            .onEach { settings ->
+                Log.d(TAG, "Settings updated from DataStore: $settings")
+                (appSettings as MutableStateFlow<AppSettings>).update { settings } }
             .shareIn(coroutineScope, SharingStarted.Eagerly)
     }
 
     override fun updateDeviceType(deviceType: DeviceType) {
         coroutineScope.launch {
+            Log.d(TAG, "Updating device type to: $deviceType")
+
             context.settingsDataStore.updateData { settings ->
-                settings.toBuilder().setDeviceType(deviceType).build()
+                val updatedSettings = settings.toBuilder().setDeviceType(deviceType).build()
+                Log.d(TAG, "Updated settings: $updatedSettings")
+                updatedSettings
             }
         }
     }
 
     override fun updateConfigType(configType: ConfigType) {
         coroutineScope.launch {
+            Log.d(TAG, "Updating config type to: $configType")
+
             context.settingsDataStore.updateData { settings ->
-                settings.toBuilder().setConfigType(configType).build()
+                val updatedSettings = settings.toBuilder().setConfigType(configType).build()
+                Log.d(TAG, "Updated settings: $updatedSettings")
+                updatedSettings
             }
         }
     }
@@ -61,6 +73,7 @@ internal class SettingsStoreImpl(
     }
 
     companion object {
+        private const val TAG = "SettingsStoreImpl"
         private const val STORE_FILE_NAME = "app_settings.pb"
 
         private object SettingsSerializer : Serializer<AppSettings> {
@@ -73,8 +86,11 @@ internal class SettingsStoreImpl(
 
             override suspend fun readFrom(input: InputStream): AppSettings {
                 try {
+                    Log.d(TAG, "Reading from InputStream")
+
                     return AppSettings.parseFrom(input)
                 } catch (exception: InvalidProtocolBufferException) {
+                    Log.e(TAG, "Cannot read proto.", exception)
                     throw CorruptionException("Cannot read proto.", exception)
                 }
             }
