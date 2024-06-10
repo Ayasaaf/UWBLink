@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "fr.eya.uwblink.app-mergeDebugResources-86:/values-en-rXC/values-en-rXC.xml",
+            "outputFile": "fr.eya.uwblink.app-mergeDebugResources-87:/values-en-rXC/values-en-rXC.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\AYA\\.gradle\\caches\\transforms-3\\024da0584c897448a452de07653ab9bf\\transformed\\core-1.12.0\\res\\values-en-rXC\\values-en-rXC.xml",
+                    "source": "C:\\Users\\AYA\\.gradle\\caches\\transforms-3\\6e4c46df836af9f5676c540023ba141a\\transformed\\core-1.13.0\\res\\values-en-rXC\\values-en-rXC.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",

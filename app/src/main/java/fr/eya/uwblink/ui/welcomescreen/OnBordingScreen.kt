@@ -251,6 +251,7 @@ fun OnBoardingIsFinished(navController: NavController, context: Context) {
     val sharedPreferences = context.getSharedPreferences("On_Boarding_Screen", Context.MODE_PRIVATE)
     val editor = sharedPreferences.edit()
     editor.putBoolean("isFinished", true)
+
     editor.apply()
 
 }

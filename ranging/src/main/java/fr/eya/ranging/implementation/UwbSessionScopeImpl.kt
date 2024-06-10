@@ -69,7 +69,7 @@ internal class UwbSessionScopeImpl(
                 listOf(UwbDevice(event.endpointAddress)),
                 RangingParameters.RANGING_UPDATE_RATE_FREQUENT
             )
-        Log.d("processEndpointFound", "Created rangingParameters: $rangingParameters")
+        Log.d("processEndpointFound", "Created rangingParameters: ${RangingParameters.CONFIG_UNICAST_DS_TWR }")
 
         trySend(EndpointEvents.EndpointFound(event.endpoint))
         Log.d("processEndpointFound", "Sent EndpointFound event for: ${event.endpoint}")
@@ -81,38 +81,29 @@ internal class UwbSessionScopeImpl(
 
 
     private fun ProducerScope<EndpointEvents>.sendResult(result: RangingResult) {
-        Log.d("sendResult", "Processing ranging result: $result")
+       // Log.d("sendResult", "Processing ranging result: $result")
 
         val endpoint =
             if (localAddresses.contains(result.device.address)) {
-                Log.d("sendResult", "Result device is local endpoint: ${result.device.address}")
+             //   Log.d("sendResult", "Result device is local endpoint: ${result.device.address}")
                 localEndpoint
             } else {
                 remoteDeviceMap[result.device.address]?.also {
-                    Log.d(
-                        "sendResult",
-                        "Result device found in remoteDeviceMap: ${result.device.address}"
-                    )
+
                 } ?: run {
-                    Log.d(
-                        "sendResult",
-                        "Result device not found in remoteDeviceMap, ignoring: ${result.device.address}"
-                    )
+
                     return
                 }
             }
 
         when (result) {
             is RangingResult.RangingResultPosition -> {
-                Log.d(
-                    "sendResult",
-                    "RangingResultPosition: ${result.position} for endpoint: $endpoint"
-                )
+
                 trySend(EndpointEvents.PositionUpdated(endpoint, result.position))
             }
 
             is RangingResult.RangingResultPeerDisconnected -> {
-                Log.d("sendResult", "RangingResultPeerDisconnected for endpoint: $endpoint")
+               // Log.d("sendResult", "RangingResultPeerDisconnected for endpoint: $endpoint")
                 trySend(EndpointEvents.UwbDisconnected(endpoint))
             }
         }

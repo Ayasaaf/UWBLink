@@ -71,6 +71,7 @@
     <string msgid="8038256446254964252" name="default_error_message">"Neplatný údaj"</string>
     <string msgid="6312721426453364202" name="default_popup_window_title">"Vyskakovací okno"</string>
     <string msgid="1890207353314751437" name="dropdown_menu">"Rozbalovací nabídka"</string>
+    <string name="error_a11y_label">Chyba: neplatné</string>
     <string name="error_icon_content_description">Chyba</string>
     <string name="exposed_dropdown_menu_content_description">Zobrazit rozbalovací nabídku</string>
     <string name="icon_content_description">Ikona dialogového okna</string>
@@ -147,6 +148,9 @@
     <string name="material_timepicker_select_time">Vyberte čas</string>
     <string name="material_timepicker_text_input_mode_description">Chcete-li zadat čas, přepněte na režim textu.</string>
     <string name="mtrl_badge_numberless_content_description">Nové oznámení</string>
+    <string name="mtrl_checkbox_state_description_checked">Zaškrtnuto</string>
+    <string name="mtrl_checkbox_state_description_indeterminate">Částečně zaškrtnuto</string>
+    <string name="mtrl_checkbox_state_description_unchecked">Nezaškrtnuto</string>
     <string name="mtrl_chip_close_icon_content_description">Odstranit položku %1$s</string>
     <string name="mtrl_exceed_max_badge_number_content_description" ns2:ignore="PluralsCandidate">Více než %1$d nových oznámení</string>
     <string name="mtrl_picker_a11y_next_month">Přejít na další měsíc</string>
@@ -159,7 +163,7 @@
     <string name="mtrl_picker_date_header_selected">%1$s</string>
     <string name="mtrl_picker_date_header_title">Vyberte datum</string>
     <string name="mtrl_picker_date_header_unselected">Vybrané datum</string>
-    <string name="mtrl_picker_day_of_week_column_header">Sloupec dnů: %1$s</string>
+    <string name="mtrl_picker_day_of_week_column_header">%1$s</string>
     <string name="mtrl_picker_end_date_description">Datum ukončení %1$s</string>
     <string name="mtrl_picker_invalid_format">Neplatný formát.</string>
     <string name="mtrl_picker_invalid_format_example">Příklad: %1$s</string>
@@ -199,7 +203,10 @@
     <string msgid="5941395253238309765" name="range_end">"Konec rozsahu"</string>
     <string msgid="7097486360902471446" name="range_start">"Začátek rozsahu"</string>
     <string msgid="6264217191555673260" name="search_menu_title">"Hledat"</string>
+    <string name="searchview_clear_text_content_description">Vymazat text</string>
+    <string name="searchview_navigation_content_description">Zpět</string>
     <string msgid="6043586758067023" name="selected">"Vybráno"</string>
+    <string name="side_sheet_accessibility_pane_title">Postranní list</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
     <string msgid="2561197295334830845" name="switch_role">"Přepnout"</string>
     <string msgid="1672349317127674378" name="tab">"Karta"</string>

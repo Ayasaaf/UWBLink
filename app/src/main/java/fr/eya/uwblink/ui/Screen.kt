@@ -6,12 +6,13 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class Screen(val route: String, val title: String, val icon: ImageVector) {
     object Device : Screen(  "Device_Screen" , "Device" , Icons.Filled.Edit)
-
+    object Store : Screen(  "Storage_Screen" , "Save" , Icons.Filled.PlayArrow)
     object Chat : Screen(  "Chat_Screen" , "Chat" , Icons.Filled.Email )
     object Home : Screen("home", "Ranging", Icons.Filled.Home)
     object Control : Screen("control", "Control", Icons.Filled.Lock)

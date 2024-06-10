@@ -2,15 +2,17 @@ package fr.eya.uwblink.ui.nav
 
 import OnboardingScreen
 import SplashScreen
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -20,6 +22,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import fr.eya.uwblink.AppContainer
 import fr.eya.uwblink.BluetoothChat.BluetoothViewModel
+import fr.eya.uwblink.storage.DataStorageScreen
 import fr.eya.uwblink.ui.MainActivity
 import fr.eya.uwblink.ui.chat.ChatScreen
 import fr.eya.uwblink.ui.control.ControlRoute
@@ -40,12 +43,13 @@ import fr.eya.uwblink.ui.welcomescreen.MainScreen
 
 @Composable
 fun AppNavGraph(
+    context: Context,
     appContainer: AppContainer,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     startDestination: String = AppDestination.SPLASH_ROUTE,
+) {
 
-    ) {
     val viewModel = hiltViewModel<BluetoothViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
     NavHost(
@@ -61,18 +65,30 @@ fun AppNavGraph(
             OnboardingScreen(navController = navController)
         }
         composable(AppDestination.HOME_ROUTE) {
+
             val homeViewModel: HomeViewModel =
                 viewModel(
                     factory = HomeViewModel.provideFactory(
+                        LocalContext.current,
                         appContainer.rangingResultSource,
-
-                        )
+                        // Pass the context here
+                    )
                 )
             HomeRoute(homeViewModel = homeViewModel)
         }
-composable(AppDestination.Main_Route){
-    MainScreen(appContainer = appContainer)
-}
+        composable(AppDestination.Main_Route) {
+            MainScreen(appContainer = appContainer)
+        }
+        composable(AppDestination.Store_Route) {
+            val homeViewModel: HomeViewModel =
+                viewModel(
+                    factory = HomeViewModel.provideFactory(
+                        LocalContext.current,
+                        appContainer.rangingResultSource,
+                    )
+                )
+            DataStorageScreen(viewModel = homeViewModel , context )
+        }
         composable(DEVICE_ROUTE) {
 
             DeviceScreen(

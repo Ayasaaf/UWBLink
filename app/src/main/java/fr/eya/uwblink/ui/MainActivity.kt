@@ -21,6 +21,7 @@
 package fr.eya.uwblink.ui
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -28,6 +29,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import dagger.hilt.android.AndroidEntryPoint
 import fr.eya.uwblink.HelloUwbApplication
 
@@ -39,6 +41,7 @@ private const val PERMISSION_REQUEST_CODE = 1234
 
 class MainActivity : ComponentActivity() {
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,8 +50,6 @@ class MainActivity : ComponentActivity() {
         (application as HelloUwbApplication).initContainer {
             runOnUiThread {
                 setContent {
-
-
                     HelloUwbApp(
                         (application as HelloUwbApplication).container
                     )
@@ -75,12 +76,17 @@ class MainActivity : ComponentActivity() {
 
     }
 
+
+
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun requestPermissions() {
         if (!arePermissionsGranted()) {
             requestPermissions(PERMISSIONS_REQUIRED, PERMISSION_REQUEST_CODE)
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun arePermissionsGranted(): Boolean {
         for (permission in PERMISSIONS_REQUIRED) {
             if (checkCallingOrSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
@@ -90,21 +96,28 @@ class MainActivity : ComponentActivity() {
         return true
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray,
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        for (result in grantResults) {
-            if (result != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions()
+    @Deprecated("Deprecated in Java")
+    @RequiresApi(Build.VERSION_CODES.R)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    arePermissionsGranted()
+                } else {
+                    TODO("VERSION.SDK_INT < TIRAMISU")
+                }
+            ) {
+                Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
+                finish()
             }
         }
     }
 
     companion object {
 
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
         private val PERMISSIONS_REQUIRED_BEFORE_T =
             listOf(
                 // Permissions needed by Nearby Connection
@@ -118,14 +131,21 @@ class MainActivity : ComponentActivity() {
                 Manifest.permission.CHANGE_WIFI_STATE,
 
                 // permission required by UWB API
-                Manifest.permission.UWB_RANGING
+                Manifest.permission.UWB_RANGING,
+
+
             )
 
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
         private val PERMISSIONS_REQUIRED_T =
             arrayOf(
                 Manifest.permission.NEARBY_WIFI_DEVICES,
+                Manifest.permission.READ_MEDIA_VIDEO ,
+                Manifest.permission.READ_MEDIA_AUDIO ,
+                Manifest.permission.READ_MEDIA_IMAGES ,
             )
 
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
         private val PERMISSIONS_REQUIRED =
             PERMISSIONS_REQUIRED_BEFORE_T.toMutableList()
                 .apply {

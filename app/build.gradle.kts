@@ -84,14 +84,17 @@ android {
 
 
 dependencies {
-    implementation("androidx.compose.material3:material3-android:1.2.1")
     implementation(project(":ranging"))
-    implementation("com.google.android.material:material:1.11.0")
+    implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.compose.material3:material3-android:1.2.1")
     val nav_version = "2.7.7"
 
     implementation("com.google.accompanist:accompanist-permissions:0.33.1-alpha")
+
+    implementation ("androidx.compose.runtime:runtime-livedata:1.6.7")
+
 
     implementation("androidx.core:core-splashscreen:1.1.0-alpha02")
 
@@ -156,7 +159,7 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.2.0")
 
 
-
+    implementation ("com.google.code.gson:gson:2.8.8")
 
 
 }

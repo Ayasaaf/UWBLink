@@ -3,9 +3,11 @@ package fr.eya.uwblink.ui.nav
 import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Button
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.NavigationBar
@@ -19,17 +21,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import fr.eya.uwblink.AppContainer
 import fr.eya.uwblink.ui.Screen
+import fr.eya.uwblink.ui.home.HomeViewModel
+import fr.eya.uwblink.ui.home.showToast
 import fr.eya.uwblink.ui.ranging.RangingControlIcon
 
 @Composable
 fun AppNavBar(
     appContainer: AppContainer,
-
+    viewModel: HomeViewModel ,
     // parameters for the ranging Button
     isRanging: Boolean,
     startRanging: () -> Unit,
@@ -68,14 +73,26 @@ fun AppNavBar(
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentDestination = navBackStackEntry?.destination
             val showFloatingActionButton =  // Check if it's the home screen
-                currentDestination?.hierarchy?.any { it.route == Screen.Home.route } == true // Conditionally show FloatingActionButton{
+                currentDestination?.hierarchy?.any { it.route == Screen.Home.route } == true // Conditionally show FloatingActionButton
             if (showFloatingActionButton && isOnboardingFinished) {
 
-                Column {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.padding(start = 20.dp, end = 20.dp)
+                ) {
+                    Button(onClick = {
+                        viewModel.loadEndpointData(context)
+                        showToast(context, "Data Loaded")
+                    }) {
+                        Text("Load Data")
+                    }
+
+                    // Floating Action Button for ranging
                     FloatingActionButton(
                         shape = CircleShape,
                         onClick = {},
-                        contentColor = Color.White
+                        contentColor = Color.White,
+                        modifier = Modifier.padding(start = 10.dp) // Add padding to separate the buttons
                     ) {
                         RangingControlIcon(selected = rangingState.value) {
                             rangingState.value = it
@@ -96,12 +113,12 @@ fun AppNavBar(
         AppNavGraph(
             appContainer = appContainer,
             modifier = Modifier.padding(innerPadding),
-            navController = navController
+            navController = navController , context = context
         )
     }
 }
 
 
 private val items =
-    listOf(Screen.Device, Screen.Home, Screen.Chat, Screen.Control, Screen.Send, Screen.Settings)
+    listOf(Screen.Device, Screen.Home, Screen.Chat, Screen.Control, Screen.Send, Screen.Settings , Screen.Store)
 

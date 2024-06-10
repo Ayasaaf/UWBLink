@@ -104,7 +104,7 @@ internal class UwbRangingControlSourceImpl(
                     Log.d("start", "Launching coroutine for preparing the UWB session")
 
                     uwbSessionScope.prepareSession().collect {
-                        Log.d("start", "Collected session result: $it")
+                      //  Log.d("start", "Collected session result: $it")
 
                         resultFlow.tryEmit(it)
                     }

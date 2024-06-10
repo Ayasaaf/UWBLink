@@ -47,6 +47,7 @@ raw getstarted
 raw hello
 raw locate
 raw phone
+raw saveanimation
 raw security
 raw sensor
 raw splasherscreen
