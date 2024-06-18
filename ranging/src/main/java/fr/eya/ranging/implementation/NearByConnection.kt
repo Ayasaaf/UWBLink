@@ -26,11 +26,11 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-private const val CONNECTION_SERVICE_ID = "0x0000002A"
-private const val CONNECTION_NAME = "0x0000002A"
+private const val CONNECTION_SERVICE_ID = "uwblink"
+private const val CONNECTION_NAME = "uwblink"
 
 internal class NearByConnection(
-    context: Context ,
+    context: Context,
     dispatcher: CoroutineDispatcher,
     private val connectionsClient: ConnectionsClient = Nearby.getConnectionsClient(context),
 ) {
@@ -69,7 +69,6 @@ internal class NearByConnection(
                     "onConnectionResult: $endPointId, ${result.status.statusCode}"
                 )
 
-
                 when (result.status.statusCode) {
                     ConnectionsStatusCodes.STATUS_OK -> {
                         Nearby.getConnectionsClient(context).stopAdvertising()
@@ -84,21 +83,19 @@ internal class NearByConnection(
                         Log.w(
                             "NearbyConnection",
                             "Connection rejected by $endPointId"
-                        ) // Log for debugging (optional)
-                        // Handle connection rejected scenario (optional)
+                        )
                     }
 
                     ConnectionsStatusCodes.STATUS_ERROR -> {
                         Log.e(
                             "NearbyConnection",
                             "Connection error with $endPointId",
-                        ) // Log error details (optional)
-                        // Handle connection error scenario (optional)
+                        )
                     }
                 }
                 if (result.status.statusCode == ConnectionsStatusCodes.STATUS_OK) {
                     dispatchEvent(NearbyEvent.EndpointConnected(endPointId))
-                    Log.d("connected" , "endpointconnected $endPointId")
+                    Log.d("connected", "endpointconnected $endPointId")
                 }
             }
 
@@ -122,6 +119,9 @@ internal class NearByConnection(
             }
             Log.d("onPayloadReceived", "Payload size: ${bytes.size} bytes")
             dispatchEvent(NearbyEvent.PayloadReceived(endpointId, bytes))
+
+            // Log to confirm image reception
+            Log.d("onPayloadReceived", "Image received successfully from endpoint: $endpointId")
         }
 
 
@@ -143,6 +143,7 @@ internal class NearByConnection(
                     .requestConnection(CONNECTION_NAME, endpoint.id, connectionLifecycleCallback)
                     .addOnSuccessListener { }
                 Log.d("NearbyConnections", "onEndpointFound: $endPointId")
+                Log.d("NearbyConnections", "Discovery strategy: ${Strategy.P2P_CLUSTER}")
             }
 
             override fun onEndpointLost(endPointId: String) {
@@ -218,6 +219,8 @@ internal class NearByConnection(
     private fun disconnectAll() {
         connectionsClient.stopAllEndpoints()
     }
+
+
 }
 
 /** Events that happen in a Nearby Connections session. */

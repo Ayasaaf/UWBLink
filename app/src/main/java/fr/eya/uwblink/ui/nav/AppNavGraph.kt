@@ -59,7 +59,7 @@ fun AppNavGraph(
     ) {
 
         composable(AppDestination.SPLASH_ROUTE) {
-            SplashScreen(navController = navController, context = MainActivity)
+            SplashScreen(navController = navController, MainActivity)
         }
         composable(AppDestination.ON_BORDING_ROUTE) {
             OnboardingScreen(navController = navController)
@@ -159,7 +159,7 @@ fun AppNavGraph(
                     factory =
                     SendViewModel.provideFactory(
                         appContainer.rangingResultSource,
-                        appContainer.contentResolver
+                        appContainer.contentResolver , appContext = context
                     )
                 )
             SendRoute(sendViewModel = sendViewModel)

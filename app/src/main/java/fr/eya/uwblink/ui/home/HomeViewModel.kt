@@ -208,12 +208,12 @@ class HomeViewModel(
             }
     }
 
-    fun saveDataToTextFile(context: Context) {
+    fun saveDataToTextFile(context: Context, fileName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val data = _ConnectedEndpointDATA.value
-            if (data != null && data.isNotEmpty()) {
+            if (!data.isNullOrEmpty()) {
                 val jsonString = Gson().toJson(data)
-                val fileSaved = saveJsonAsTextFile(context, "endpoint_data.txt", jsonString)
+                val fileSaved = saveJsonAsTextFile(context, "$fileName.txt", jsonString)
                 val mainHandler = Handler(Looper.getMainLooper())
                 mainHandler.post {
                     if (fileSaved) {

@@ -13,7 +13,9 @@ drawable ic_accept
 drawable ic_blu
 drawable ic_bluetooth
 drawable ic_bluetoothconected
+drawable ic_clear
 drawable ic_decline
+drawable ic_image
 drawable ic_key
 drawable ic_launcher_background
 drawable ic_lock
@@ -50,10 +52,14 @@ raw phone
 raw saveanimation
 raw security
 raw sensor
+raw settings
 raw splasherscreen
 raw user
+raw usericon
 raw welcome
 string app_name
+string channel_description
+string channel_name
 string first_fragment_label
 string lorem_ipsum
 string next

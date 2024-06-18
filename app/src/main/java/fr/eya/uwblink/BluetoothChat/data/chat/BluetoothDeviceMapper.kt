@@ -28,8 +28,8 @@ import fr.eya.uwblink.BluetoothChat.domain.BluetoothDeviceDomain
 @SuppressLint("MissingPermission")
 fun BluetoothDevice.toBluetoothDeviceDomain(): BluetoothDeviceDomain {
    return BluetoothDeviceDomain(
-       name = name
-       , address = address ,
+       name = name ,
+       address = address ,
 
 
     )

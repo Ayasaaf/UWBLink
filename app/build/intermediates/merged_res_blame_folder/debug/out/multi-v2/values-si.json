@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "fr.eya.uwblink.app-mergeDebugResources-87:/values-si/values-si.xml",
+            "outputFile": "fr.eya.uwblink.app-mergeDebugResources-89:/values-si/values-si.xml",
             "map": [
                 {
                     "source": "C:\\Users\\AYA\\.gradle\\caches\\transforms-3\\2915ae6de32b8d77da52bc51fd501586\\transformed\\play-services-base-18.3.0\\res\\values-si\\values.xml",

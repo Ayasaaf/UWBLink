@@ -161,7 +161,10 @@ dependencies {
 
     implementation ("com.google.code.gson:gson:2.8.8")
 
+    //notification
 
+    implementation ("androidx.core:core-ktx:1.6.0")
+    implementation ("androidx.work:work-runtime-ktx:2.7.1")
 }
 
 

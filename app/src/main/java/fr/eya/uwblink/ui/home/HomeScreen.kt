@@ -35,7 +35,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,8 +59,6 @@ private val ENDPOINT_COLORS =
 @Composable
 fun HomeScreen(uiState: HomeUiState , modifier: Modifier = Modifier, ) {
     val topAppBarState = rememberTopAppBarState()
-    val context = LocalContext.current
-
     val connectedEndpoints = uiState.connectedEndpoints
     val avgDistance = connectedEndpoints.mapNotNull { it.position.distance?.value }.average()
     val avgAzimuth = connectedEndpoints.mapNotNull { it.position.azimuth?.value }.average()
@@ -85,7 +82,6 @@ fun HomeScreen(uiState: HomeUiState , modifier: Modifier = Modifier, ) {
             Row {
                 RangingPlot(uiState.connectedEndpoints)
             }
-            // Button to check stored data
 
         }
     }
@@ -126,7 +122,7 @@ fun RangingPlot(connectedEndpoints: List<ConnectedEndpoint>) {
         val centerX = size.width / 2.0f
         val centerY = size.height / 2.0f
         val maxRadius = centerX.coerceAtMost(centerY)  // Limit radius to half of canvas dimension
-
+        val scale = drawPolar(center)
         connectedEndpoints.forEachIndexed { index, endpoint ->
             endpoint.position.distance?.let { distance ->
                 endpoint.position.azimuth?.let { azimuth ->
@@ -167,6 +163,7 @@ fun RangingPlot(connectedEndpoints: List<ConnectedEndpoint>) {
                         end = Offset(projectedX.toFloat(), projectedY.toFloat()),
                         strokeWidth = 5.0f
                     )
+
                 }
             }
         }

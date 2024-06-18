@@ -9,7 +9,10 @@ class HelloUwbApplication : Application() {
 
     lateinit var container: AppContainer
 
+
+
     fun initContainer(afterLoading: () -> Unit ) {
         container = AppContainerImpl(applicationContext, afterLoading )
     }
+
 }

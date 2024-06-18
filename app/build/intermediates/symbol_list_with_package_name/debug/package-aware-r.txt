@@ -1402,7 +1402,11 @@ attr yearStyle
 attr yearTodayStyle
 bool abc_action_bar_embed_tabs
 bool abc_config_actionMenuItemAllCaps
+bool enable_system_alarm_service_default
+bool enable_system_foreground_service_default
+bool enable_system_job_service_default
 bool mtrl_btn_textappearance_all_caps
+bool workmanager_test_configuration
 color abc_background_cache_hint_selector_material_dark
 color abc_background_cache_hint_selector_material_light
 color abc_btn_colored_borderless_text_material
@@ -3137,9 +3141,11 @@ drawable ic_call_answer_video
 drawable ic_call_answer_video_low
 drawable ic_call_decline
 drawable ic_call_decline_low
+drawable ic_clear
 drawable ic_clear_black_24
 drawable ic_clock_black_24dp
 drawable ic_decline
+drawable ic_image
 drawable ic_key
 drawable ic_keyboard_black_24dp
 drawable ic_launcher_background
@@ -3990,8 +3996,10 @@ raw phone
 raw saveanimation
 raw security
 raw sensor
+raw settings
 raw splasherscreen
 raw user
+raw usericon
 raw welcome
 string abc_action_bar_home_description
 string abc_action_bar_up_description
@@ -4036,6 +4044,8 @@ string call_notification_hang_up_action
 string call_notification_incoming_text
 string call_notification_ongoing_text
 string call_notification_screening_text
+string channel_description
+string channel_name
 string character_counter_content_description
 string character_counter_overflowed_content_description
 string character_counter_pattern

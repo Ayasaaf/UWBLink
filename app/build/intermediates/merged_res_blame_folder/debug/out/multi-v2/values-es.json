@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "fr.eya.uwblink.app-mergeDebugResources-87:/values-es/values-es.xml",
+            "outputFile": "fr.eya.uwblink.app-mergeDebugResources-89:/values-es/values-es.xml",
             "map": [
                 {
                     "source": "C:\\Users\\AYA\\.gradle\\caches\\transforms-3\\955e2c3f34046e79d1fe61049f5c6762\\transformed\\play-services-nearby-19.2.0\\res\\values-es\\values.xml",

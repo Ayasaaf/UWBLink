@@ -1,11 +1,10 @@
 package fr.eya.uwblink.ui.device
 
 import LoaderAnimation
-import android.content.Context
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,12 +15,15 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,42 +36,24 @@ import fr.eya.uwblink.ui.nav.AppDestination
 
 @Composable
 fun DeviceScreen(
-
     navController: NavController,
     onStartServer: () -> Unit,
     state: BluetoothUiState,
     onStartScan: () -> Unit,
     onStopScan: () -> Unit,
-    onDeviceClick: (BluetoothDevice) -> Unit,
+    onDeviceClick: (BluetoothDevice) -> Unit
+) {
+    val (isScanning, setIsScanning) = remember { mutableStateOf(false) } // Track scanning state
 
-    ) {
-
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-
-            IconButton(onClick = {
-
-                navController.navigate(AppDestination.Choose_ROUTE)
-            }) {
-                Icon(
-                    imageVector = Icons.Default.Close,
-                    contentDescription = "Disconnect"
-                )
+    Column(modifier = Modifier.fillMaxSize()) {
+        Row(modifier = Modifier
+            .fillMaxWidth() .align(Alignment.Start)
+            .padding()) {
+            IconButton(onClick = { navController.navigate(AppDestination.Choose_ROUTE) }) {
+                Icon(imageVector = Icons.Default.Close, contentDescription = "Disconnect")
             }
         }
-
         BluetoothDeviceList(
-            context = LocalContext.current,
             navController = navController,
             PairedDevices = state.pairedDevices,
             ScannedDevices = state.scannedDevices,
@@ -78,42 +62,44 @@ fun DeviceScreen(
                 .fillMaxWidth()
                 .weight(1f)
         )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround
+        Row( // Modifier adjustments for center alignment
+            modifier = Modifier
+                .fillMaxWidth() // Stretch horizontally
+                .padding() // Add some padding (optional)
+                .align(Alignment.CenterHorizontally) // Vertically center within parent
         ) {
-            Button(
+            Button( // Circular scan button with dynamic color
                 onClick = {
-                    onStartScan()
-                    navController.navigate("Device_Screen")
-                }
-
-
-            ) {
-                Text(text = "Start scan")
-            }
-            Button(
-                onClick = { onStopScan() },
-
-                ) {
-                Text(text = "Stop Scan ")
-            }
-            Button(
-                onClick = {
-                    onStartServer()
-                    navController.navigate("Chat_Screen")
+                    if (isScanning) {
+                        onStopScan()
+                        setIsScanning(false)
+                    } else {
+                        onStartScan()
+                        setIsScanning(true)
                     }
-
+                },
+                modifier = Modifier.size(width = 100.dp, height = 50.dp),
+                colors = if (isScanning) ButtonDefaults.buttonColors(Color.Green) else ButtonDefaults.buttonColors(Color(0xFF6200EE))
             ) {
-                Text(text = "Start Pairing")
+                Text(text = if (isScanning) "Stop" else "Start")
             }
-        }}}
+            Spacer(modifier = Modifier.weight(0.5f))
+            Button( // Circular pairing button
+                onClick = { onStartServer(); navController.navigate(AppDestination.CHAT_ROUTE) },
+                modifier = Modifier.size(width = 100.dp, height = 50.dp),
+
+                colors = ButtonDefaults.buttonColors(Color(0xFF6200EE))
+            ) {
+                Text(text = "Pair")
+            }
+        }
+    }
+}
 
 @Composable
 fun BluetoothDeviceList(
 
     navController: NavController,
-    context: Context,
     PairedDevices: List<BluetoothDevice>,
     ScannedDevices: List<BluetoothDevice>,
     onClick: (BluetoothDevice) -> Unit,
@@ -175,7 +161,7 @@ fun BluetoothDeviceList(
                     .fillMaxWidth()
                     .clickable {
                         onClick(device)
-                         navController.navigate("Chat_Screen")
+                        navController.navigate(AppDestination.CHAT_ROUTE)
                     }
                     .padding(16.dp)
             )

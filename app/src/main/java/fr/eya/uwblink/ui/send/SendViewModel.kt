@@ -1,12 +1,14 @@
 package fr.eya.uwblink.ui.send
 
 import android.content.ContentResolver
+import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import fr.eya.ranging.EndpointEvents
 import fr.eya.ranging.UwbEndPoint
+import fr.eya.uwblink.notification.showImageReceivedNotification
 import fr.eya.uwblink.uwbranging.data.UwbRangingControlSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +28,9 @@ private const val RECEIVED_FILE_PATH = "received"
 
 class SendViewModel(
     private val uwbRangingControlSource: UwbRangingControlSource,
-    private val contentResolver: ContentResolver
+    private val contentResolver: ContentResolver ,
+    private val appContext: Context // Add this line
+
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<SendUiState> = MutableStateFlow(SendUiState.InitialState)
@@ -78,8 +82,14 @@ class SendViewModel(
         receiveJob = null
         val file = File.createTempFile(RECEIVED_FILE_PATH, null)
         contentResolver.openOutputStream(file.toUri())?.use { it.write(imageBytes) }
+        val receivedUri = file.toUri()
         _uiState.update { SendUiState.ReceivedState(endpoint, file.toUri()) }
+        CoroutineScope(Dispatchers.Main).launch {
+            showImageReceivedNotification(appContext, receivedUri)
+        }
     }
+
+
 
     private fun startSendingJob(uri: Uri): Job? {
         contentResolver.openInputStream(uri)?.use { inputStream ->
@@ -117,12 +127,13 @@ class SendViewModel(
     companion object {
         fun provideFactory(
             uwbRangingControlSource: UwbRangingControlSource,
-            contentResolver: ContentResolver
+            contentResolver: ContentResolver ,
+            appContext: Context
         ): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return SendViewModel(uwbRangingControlSource, contentResolver) as T
+                    return SendViewModel(uwbRangingControlSource, contentResolver, appContext) as T
                 }
             }
     }
@@ -134,5 +145,5 @@ sealed class SendUiState {
 
     data class ReceivedState(val endpoint: UwbEndPoint, val receivedImageUri: Uri) : SendUiState()
 
-    object InitialState : SendUiState()
+    data object InitialState : SendUiState()
 }

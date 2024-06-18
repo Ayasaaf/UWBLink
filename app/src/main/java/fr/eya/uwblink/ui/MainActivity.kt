@@ -21,6 +21,9 @@
 package fr.eya.uwblink.ui
 
 import android.Manifest
+import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -32,6 +35,7 @@ import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import dagger.hilt.android.AndroidEntryPoint
 import fr.eya.uwblink.HelloUwbApplication
+import fr.eya.uwblink.R
 
 
 private const val PERMISSION_REQUEST_CODE = 1234
@@ -44,9 +48,9 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         requestPermissions()
 
+        createNotificationChannel()
         (application as HelloUwbApplication).initContainer {
             runOnUiThread {
                 setContent {
@@ -77,8 +81,6 @@ class MainActivity : ComponentActivity() {
     }
 
 
-
-
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun requestPermissions() {
         if (!arePermissionsGranted()) {
@@ -97,7 +99,6 @@ class MainActivity : ComponentActivity() {
     }
 
     @Deprecated("Deprecated in Java")
-    @RequiresApi(Build.VERSION_CODES.R)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PERMISSION_REQUEST_CODE) {
@@ -132,17 +133,19 @@ class MainActivity : ComponentActivity() {
 
                 // permission required by UWB API
                 Manifest.permission.UWB_RANGING,
-
-
+                //permission for notification
+                Manifest.permission.POST_NOTIFICATIONS
             )
+        const val CHANNEL_ID = "IMAGE_RECEIVED_CHANNEL"
 
         @RequiresApi(Build.VERSION_CODES.TIRAMISU)
         private val PERMISSIONS_REQUIRED_T =
             arrayOf(
                 Manifest.permission.NEARBY_WIFI_DEVICES,
-                Manifest.permission.READ_MEDIA_VIDEO ,
-                Manifest.permission.READ_MEDIA_AUDIO ,
-                Manifest.permission.READ_MEDIA_IMAGES ,
+                Manifest.permission.READ_MEDIA_VIDEO,
+                Manifest.permission.READ_MEDIA_AUDIO,
+                Manifest.permission.READ_MEDIA_IMAGES,
+                Manifest.permission.POST_NOTIFICATIONS
             )
 
         @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -155,4 +158,21 @@ class MainActivity : ComponentActivity() {
                 }
                 .toTypedArray()
     }
+
+    private fun createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        val name = getString(R.string.channel_name)
+        val descriptionText = getString(R.string.channel_description)
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+            description = descriptionText
+        }
+        // Register the channel with the system
+        val notificationManager: NotificationManager =
+            getSystemService(Application.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+
+
 }

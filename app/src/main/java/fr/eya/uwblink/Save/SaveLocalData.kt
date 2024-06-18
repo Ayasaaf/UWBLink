@@ -18,16 +18,5 @@ fun saveTextFile(context: Context, fileName: String, content: String): Boolean {
         false
     }
 }
-fun readTextFile(context: Context, fileName: String): String? {
-    return try {
-        val file = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName)
-        if (file.exists()) {
-            file.readText(Charsets.UTF_8)
-        } else {
-            null
-        }
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
-    }
-}
+
+

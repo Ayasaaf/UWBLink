@@ -29,9 +29,10 @@ import fr.eya.uwblink.ui.home.HomeViewModel
 @Composable
 fun DataStorageScreen(viewModel: HomeViewModel, context: Context) {
     var periodText by remember { mutableStateOf("") }
+    var fileNameText by remember { mutableStateOf("") }  // Ajoutez cette ligne
 
     // Load Lottie animation composition
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.))
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.saveanimation))
 
     Column(
         modifier = Modifier
@@ -42,7 +43,10 @@ fun DataStorageScreen(viewModel: HomeViewModel, context: Context) {
         // Lottie animation
         LottieAnimation(
             composition,
-            modifier = Modifier.size(300.dp) .fillMaxWidth() .align(Alignment.CenterHorizontally)
+            modifier = Modifier
+                .size(300.dp)
+                .fillMaxWidth()
+                .align(Alignment.CenterHorizontally)
         )
 
         // Text field for entering storage period
@@ -50,6 +54,14 @@ fun DataStorageScreen(viewModel: HomeViewModel, context: Context) {
             value = periodText,
             onValueChange = { periodText = it },
             label = { Text("Enter storage period in seconds") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        // Text field for entering file name
+        OutlinedTextField(
+            value = fileNameText,
+            onValueChange = { fileNameText = it },
+            label = { Text("Enter file name") },  // Ajoutez cette ligne
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -80,7 +92,7 @@ fun DataStorageScreen(viewModel: HomeViewModel, context: Context) {
             // Save Data Button
             Button(
                 onClick = {
-                    viewModel.saveDataToTextFile(context)
+                    viewModel.saveDataToTextFile(context, fileNameText)  // Modifiez cette ligne
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {

@@ -36,15 +36,8 @@ internal abstract class NearbyConnector(protected val connections: NearByConnect
     private fun tryParseOobMessage(payload: ByteArray): Data? {
         return try {
             val oob = Oob.parseFrom(payload)
-            if (oob.hasControl()) {
-                d("tryParseOobMessage", "Parsed Oob message with control data")
-                oob.data
-            } else {
-                d("tryParseOobMessage", "Oob message does not contain control data")
-                null
-            }
-        } catch (e: InvalidProtocolBufferException) {
-            e("tryParseOobMessage", "Failed to parse Oob message", e)
+            if (oob.hasData()) oob.data else null
+        } catch (_: InvalidProtocolBufferException) {
             null
         }
     }
@@ -146,6 +139,9 @@ private fun processEndpointLost(event: NearbyEvent.EndpointLost): UwbOobEvent? {
     private suspend fun processPayload(event: NearbyEvent.PayloadReceived): UwbOobEvent? {
         d("processPayload", "Processing payload received event for endpointId: ${event.endpointId}")
 
+        // Log raw payload for debugging
+        d("processPayload", "Raw payload: ${event.payload.contentToString()}")
+
         tryParseUwbSessionInfo(event.payload)?.let {
             d("processPayload", "Parsed UwbSessionInfo successfully for endpointId: ${event.endpointId}")
             return processUwbSessionInfo(event.endpointId, it)
@@ -156,13 +152,14 @@ private fun processEndpointLost(event: NearbyEvent.EndpointLost): UwbOobEvent? {
             w("processPayload", "Endpoint not found for endpointId: ${event.endpointId}")
             return null
         }
+
         tryParseOobMessage(event.payload)?.let { parsedOobMessage ->
             d("processPayload", "Parsed OobMessage successfully for endpointId: ${event.endpointId}")
             return UwbOobEvent.MessageReceived(endpoint, parsedOobMessage.message.toByteArray())
         } ?: run {
-            // Parse failed, log the event payload for debugging
             w("processPayload", "Failed to parse OobMessage for endpointId: ${event.endpointId}")
-            d("processPayload", "Event payload: ${event.payload}") // Log the raw payload
+            // Log the event payload for debugging
+            d("processPayload", "Event payload: ${event.payload.contentToString()}") // Log the raw payload
             return null // Or return a default value if appropriate
         }
 
@@ -171,20 +168,13 @@ private fun processEndpointLost(event: NearbyEvent.EndpointLost): UwbOobEvent? {
     }
 
     override fun sendMessage(endpoint: UwbEndPoint, message: ByteArray) {
-        val endpointId = lookupEndpointId(endpoint)
-        if (endpointId == null) {
-            w("sendMessage", "Failed to lookup endpointId for endpoint: $endpoint")
-            return
-        }
-
-        d("sendMessage", "Sending message to endpointId: $endpointId")
-
-        val payload = Oob.newBuilder()
-            .setData(Data.newBuilder().setMessage(ByteString.copyFrom(message)).build())
-            .build()
-            .toByteArray()
-
-        d("sendMessage", "Payload size: ${payload.size} bytes")
-        connections.sendPayload(endpointId, payload)
-        d("sendMessage", "Payload sent successfully to endpointId: $endpointId")
-    } }
+        val endpointId = lookupEndpointId(endpoint) ?: return
+        connections.sendPayload(
+            endpointId,
+            Oob.newBuilder()
+                .setData(Data.newBuilder().setMessage(ByteString.copyFrom(message)).build())
+                .build()
+                .toByteArray()
+        )
+    }
+}

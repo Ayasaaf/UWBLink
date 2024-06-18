@@ -47,17 +47,6 @@ fun readDataFromFile(context: Context, fileName: String): List<EndpointData>? {
     }
 }
 
-fun printReadableData(context: Context, fileName: String) {
-    val data = readDataFromFile(context, fileName)
-    data?.forEach { endpoint ->
-        println("EndPointId: ${endpoint.EndPointId}")
-        println("Distance: ${endpoint.Distance}")
-        println("Azimuth: ${endpoint.Azimuth}")
-        println("Elevation: ${endpoint.Elevation}")
-        println("Timestamp: ${convertTimestampToReadableDate(endpoint.Timestamp)}")
-        println("ReadableDate: ${endpoint.ReadableDate}")
-    }
-}
 fun saveJsonAsTextFile(context: Context, fileName: String, jsonContent: String): Boolean {
     return try {
         val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)

@@ -56,15 +56,17 @@ import java.util.UUID
 
 class AndroidBluetoothController(
     private val context: Context,
-
     ) : BluetoothController {
     val TAG = "ErrorConnection"
+
+
     private val bluetoothManager by lazy {
         context.getSystemService(BluetoothManager::class.java)
     }
     private val bluetoothAdapter by lazy {
         bluetoothManager?.adapter
     }
+
     private var dataTransferService: BluetoothDataTransferService? = null
     private val _isConnected = MutableStateFlow(false)
 
