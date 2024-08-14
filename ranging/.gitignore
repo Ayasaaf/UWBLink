@@ -1,2 +1,23 @@
-/.idea
-/build
+.gradle/
+build/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Signing keys
+*.jks
+
+# IntelliJ/Android Studio
+.idea/
+*.iml
+
+# MacOS
+.DS_Store
+
+# Linux
+*.swp
+
+# Windows
+Thumbs.db
