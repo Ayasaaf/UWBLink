@@ -15,6 +15,7 @@ object AppDestination {
     const val CONTROL_ROUTE = "control"
     const val Main_Route = "Main_Screen"
     const val Store_Route = "Storage_Screen"
+    const val Alert_Route ="alert"
 }
 
 class AppNavigation(private val navController: NavHostController) {

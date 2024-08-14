@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class Screen(val route: String, val title: String, val icon: ImageVector) {
@@ -18,4 +19,5 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
     object Control : Screen("control", "Control", Icons.Filled.Lock)
     object Send : Screen("send", "Share", Icons.AutoMirrored.Filled.Send)
     object Settings : Screen("settings", "Setting", Icons.Filled.Settings)
+    object Alert : Screen("alert", "Alert" , Icons.Filled.Warning)
 }

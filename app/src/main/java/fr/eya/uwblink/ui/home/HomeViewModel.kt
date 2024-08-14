@@ -1,5 +1,6 @@
 package fr.eya.uwblink.ui.home
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
@@ -13,7 +14,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import fr.eya.ranging.EndpointEvents
 import fr.eya.ranging.UwbEndPoint
-import fr.eya.uwblink.Save.saveTextFile
+import fr.eya.uwblink.save.saveTextFile
 import fr.eya.uwblink.storage.EndpointData
 import fr.eya.uwblink.storage.convertTimestampToReadableDate
 import fr.eya.uwblink.storage.readDataFromFile
@@ -51,6 +52,32 @@ class HomeViewModel(
     private val _ConnectedEndpointDATA = MutableLiveData<List<EndpointData>?>()
     val endpointData: MutableLiveData<List<EndpointData>?> get() = _ConnectedEndpointDATA
 
+    private var maxDistanceAllowed: Float = 0.0f
+
+    fun setMaxDistanceAllowed(distance: Float) {
+        maxDistanceAllowed = distance
+    }
+    private fun checkDistanceAndTriggerAlert(endpoint: UwbEndPoint, position: RangingPosition) {
+        position.distance?.value?.let { distance ->
+            if (distance > maxDistanceAllowed) {
+                triggerAlert(context, endpoint, distance)
+            }
+        }
+    }
+    private fun triggerAlert(context: Context, endpoint: UwbEndPoint, distance: Float) {
+        val message = "Vous avez dépassé la zone de danger définie. Distance actuelle : ${distance}m"
+
+        val mainHandler = Handler(Looper.getMainLooper())
+        mainHandler.post {
+            AlertDialog.Builder(context)
+                .setTitle("Alerte de zone de danger")
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+        }
+    }
     private fun updateUiState(): HomeUiState {
         val uiState = HomeUiStateImpl(
             endpoints
@@ -88,6 +115,9 @@ class HomeViewModel(
                             if (isDataStorageActive) {
                                 saveEndpointData(context, result.endpoint, result.position)
                             }
+                            checkDistanceAndTriggerAlert(result.endpoint, result.position) // Vérification de la distance
+
+
                         }
 
                         is EndpointEvents.EndpointLost -> {

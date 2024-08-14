@@ -40,20 +40,20 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\AYA\\.gradle\\caches\\transforms-3\\13414ee0613b3ffa5b3b69a52fa12092\\transformed\\play-services-basement-18.3.0\\res\\values-sl\\values.xml",
+                    "source": "C:\\Users\\AYA\\.gradle\\caches\\transforms-3\\67ef3ff1d4ef87d569681fa09d788fb5\\transformed\\play-services-base-18.5.0\\res\\values-sl\\values.xml",
                     "from": {
-                        "startLines": "4",
-                        "startColumns": "0",
-                        "startOffsets": "195",
-                        "endColumns": "135",
-                        "endOffsets": "330"
+                        "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
+                        "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+                        "startOffsets": "193,295,456,581,684,827,953,1063,1163,1317,1420,1583,1709,1857,2005,2071,2129",
+                        "endColumns": "101,160,124,102,142,125,109,99,153,102,162,125,147,147,65,57,79",
+                        "endOffsets": "294,455,580,683,826,952,1062,1162,1316,1419,1582,1708,1856,2004,2070,2128,2208"
                     },
                     "to": {
-                        "startLines": "60",
-                        "startColumns": "4",
-                        "startOffsets": "5829",
-                        "endColumns": "139",
-                        "endOffsets": "5964"
+                        "startLines": "52,53,54,55,56,57,58,59,61,62,63,64,65,66,67,68,69",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "4827,4933,5098,5227,5334,5481,5611,5725,5969,6127,6234,6401,6531,6683,6835,6905,6967",
+                        "endColumns": "105,164,128,106,146,129,113,103,157,106,166,129,151,151,69,61,83",
+                        "endOffsets": "4928,5093,5222,5329,5476,5606,5720,5824,6122,6229,6396,6526,6678,6830,6900,6962,7046"
                     }
                 },
                 {
@@ -142,20 +142,20 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\AYA\\.gradle\\caches\\transforms-3\\2915ae6de32b8d77da52bc51fd501586\\transformed\\play-services-base-18.3.0\\res\\values-sl\\values.xml",
+                    "source": "C:\\Users\\AYA\\.gradle\\caches\\transforms-3\\c64e6a3ec68f23557c85fdb906248730\\transformed\\play-services-basement-18.4.0\\res\\values-sl\\values.xml",
                     "from": {
-                        "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
-                        "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
-                        "startOffsets": "193,295,456,581,684,827,953,1063,1163,1317,1420,1583,1709,1857,2005,2071,2129",
-                        "endColumns": "101,160,124,102,142,125,109,99,153,102,162,125,147,147,65,57,79",
-                        "endOffsets": "294,455,580,683,826,952,1062,1162,1316,1419,1582,1708,1856,2004,2070,2128,2208"
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "195",
+                        "endColumns": "135",
+                        "endOffsets": "330"
                     },
                     "to": {
-                        "startLines": "52,53,54,55,56,57,58,59,61,62,63,64,65,66,67,68,69",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "4827,4933,5098,5227,5334,5481,5611,5725,5969,6127,6234,6401,6531,6683,6835,6905,6967",
-                        "endColumns": "105,164,128,106,146,129,113,103,157,106,166,129,151,151,69,61,83",
-                        "endOffsets": "4928,5093,5222,5329,5476,5606,5720,5824,6122,6229,6396,6526,6678,6830,6900,6962,7046"
+                        "startLines": "60",
+                        "startColumns": "4",
+                        "startOffsets": "5829",
+                        "endColumns": "139",
+                        "endOffsets": "5964"
                     }
                 },
                 {

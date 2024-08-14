@@ -4,20 +4,20 @@
             "outputFile": "fr.eya.uwblink.app-mergeDebugResources-89:/values-ur/values-ur.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\AYA\\.gradle\\caches\\transforms-3\\2915ae6de32b8d77da52bc51fd501586\\transformed\\play-services-base-18.3.0\\res\\values-ur\\values.xml",
+                    "source": "C:\\Users\\AYA\\.gradle\\caches\\transforms-3\\c64e6a3ec68f23557c85fdb906248730\\transformed\\play-services-basement-18.4.0\\res\\values-ur\\values.xml",
                     "from": {
-                        "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
-                        "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
-                        "startOffsets": "193,297,457,579,686,822,945,1053,1153,1301,1407,1575,1699,1841,2006,2065,2128",
-                        "endColumns": "103,159,121,106,135,122,107,99,147,105,167,123,141,164,58,62,83",
-                        "endOffsets": "296,456,578,685,821,944,1052,1152,1300,1406,1574,1698,1840,2005,2064,2127,2211"
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "195",
+                        "endColumns": "147",
+                        "endOffsets": "342"
                     },
                     "to": {
-                        "startLines": "50,51,52,53,54,55,56,57,59,60,61,62,63,64,65,66,67",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "4657,4765,4929,5055,5166,5306,5433,5545,5801,5953,6063,6235,6363,6509,6678,6741,6808",
-                        "endColumns": "107,163,125,110,139,126,111,103,151,109,171,127,145,168,62,66,87",
-                        "endOffsets": "4760,4924,5050,5161,5301,5428,5540,5644,5948,6058,6230,6358,6504,6673,6736,6803,6891"
+                        "startLines": "58",
+                        "startColumns": "4",
+                        "startOffsets": "5649",
+                        "endColumns": "151",
+                        "endOffsets": "5796"
                     }
                 },
                 {
@@ -74,20 +74,20 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\AYA\\.gradle\\caches\\transforms-3\\13414ee0613b3ffa5b3b69a52fa12092\\transformed\\play-services-basement-18.3.0\\res\\values-ur\\values.xml",
+                    "source": "C:\\Users\\AYA\\.gradle\\caches\\transforms-3\\67ef3ff1d4ef87d569681fa09d788fb5\\transformed\\play-services-base-18.5.0\\res\\values-ur\\values.xml",
                     "from": {
-                        "startLines": "4",
-                        "startColumns": "0",
-                        "startOffsets": "195",
-                        "endColumns": "147",
-                        "endOffsets": "342"
+                        "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
+                        "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+                        "startOffsets": "193,297,457,579,686,822,945,1053,1153,1301,1407,1575,1699,1841,2006,2065,2128",
+                        "endColumns": "103,159,121,106,135,122,107,99,147,105,167,123,141,164,58,62,83",
+                        "endOffsets": "296,456,578,685,821,944,1052,1152,1300,1406,1574,1698,1840,2005,2064,2127,2211"
                     },
                     "to": {
-                        "startLines": "58",
-                        "startColumns": "4",
-                        "startOffsets": "5649",
-                        "endColumns": "151",
-                        "endOffsets": "5796"
+                        "startLines": "50,51,52,53,54,55,56,57,59,60,61,62,63,64,65,66,67",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "4657,4765,4929,5055,5166,5306,5433,5545,5801,5953,6063,6235,6363,6509,6678,6741,6808",
+                        "endColumns": "107,163,125,110,139,126,111,103,151,109,171,127,145,168,62,66,87",
+                        "endOffsets": "4760,4924,5050,5161,5301,5428,5540,5644,5948,6058,6230,6358,6504,6673,6736,6803,6891"
                     }
                 },
                 {

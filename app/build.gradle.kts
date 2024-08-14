@@ -89,6 +89,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.compose.material3:material3-android:1.2.1")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
     val nav_version = "2.7.7"
 
     implementation("com.google.accompanist:accompanist-permissions:0.33.1-alpha")

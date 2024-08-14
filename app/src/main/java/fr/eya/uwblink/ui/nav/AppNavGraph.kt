@@ -3,9 +3,11 @@ package fr.eya.uwblink.ui.nav
 import OnboardingScreen
 import SplashScreen
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -13,6 +15,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -20,10 +24,16 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import fr.eya.uwblink.AppContainer
 import fr.eya.uwblink.BluetoothChat.BluetoothViewModel
+import fr.eya.uwblink.R
 import fr.eya.uwblink.storage.DataStorageScreen
 import fr.eya.uwblink.ui.MainActivity
+import fr.eya.uwblink.ui.alert.DangerZoneScreen
 import fr.eya.uwblink.ui.chat.ChatScreen
 import fr.eya.uwblink.ui.control.ControlRoute
 import fr.eya.uwblink.ui.control.ControlViewModel
@@ -89,6 +99,19 @@ fun AppNavGraph(
                 )
             DataStorageScreen(viewModel = homeViewModel , context )
         }
+        composable(AppDestination.Alert_Route) {
+            val homeViewModel: HomeViewModel = viewModel(
+                factory = HomeViewModel.provideFactory(
+                    LocalContext.current,
+                    appContainer.rangingResultSource,
+                )
+            )
+            DangerZoneScreen(homeViewModel) {
+                // Handle the distance set, e.g., show a toast message
+                Toast.makeText(context, "Distance set to $it meters", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         composable(DEVICE_ROUTE) {
 
             DeviceScreen(
@@ -130,11 +153,20 @@ fun AppNavGraph(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-                        Text(text = "You need to pair a device to chat ")
+                        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.alert))
+                        val progress by animateLottieCompositionAsState(composition)
+
+                        LottieAnimation(
+                            composition = composition,
+                            progress = progress,
+                            modifier = Modifier.size(200.dp)
+                        )
+                        Text(text = "You need to pair a device to chat" , fontSize = 20.sp)
                     }
                 }
             }
         }
+
 
 
         composable(CONTROL_ROUTE) {

@@ -24,15 +24,14 @@ import android.Manifest
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import dagger.hilt.android.AndroidEntryPoint
 import fr.eya.uwblink.HelloUwbApplication
 import fr.eya.uwblink.R
@@ -67,15 +66,15 @@ class MainActivity : ComponentActivity() {
         val packageManager: PackageManager = applicationContext.packageManager
         val deviceSupportsUwb = packageManager.hasSystemFeature("android.hardware.uwb")
 
-        if (!deviceSupportsUwb) {
-            Log.e("UWB Sample", "Device does not support Ultra-wideband")
-            Toast.makeText(applicationContext, "Device does not support UWB", Toast.LENGTH_SHORT)
-                .show()
-            //TODO: Uncomment this if you want to see it running on a non-supported device
-            finishAndRemoveTask()
-        } else {
-            Toast.makeText(applicationContext, "Device supports UWB", Toast.LENGTH_SHORT).show()
-        }
+        /* if (!deviceSupportsUwb) {
+             Log.e("UWB Sample", "Device does not support Ultra-wideband")
+             Toast.makeText(applicationContext, "Device does not support UWB", Toast.LENGTH_SHORT)
+                 .show()
+             //TODO: Uncomment this if you want to see it running on a non-supported device
+             finishAndRemoveTask()
+         } else {
+             Toast.makeText(applicationContext, "Device supports UWB", Toast.LENGTH_SHORT).show()
+         }*/
 
 
     }
@@ -90,28 +89,23 @@ class MainActivity : ComponentActivity() {
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun arePermissionsGranted(): Boolean {
-        for (permission in PERMISSIONS_REQUIRED) {
-            if (checkCallingOrSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
-                return false
-            }
+        return PERMISSIONS_REQUIRED.all {
+            ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
         }
-        return true
     }
 
     @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PERMISSION_REQUEST_CODE) {
-            if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    arePermissionsGranted()
-                } else {
-                    TODO("VERSION.SDK_INT < TIRAMISU")
-                }
-            ) {
-                Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
+            val deniedPermissions = permissions.filterIndexed { index, _ ->
+                grantResults[index] == PackageManager.PERMISSION_DENIED
+            }
+            if (deniedPermissions.isNotEmpty()) {
+                Toast.makeText(this, "Permission denied: ${deniedPermissions.joinToString()}", Toast.LENGTH_SHORT).show()
                 finish()
+            } else {
+                Toast.makeText(this, "All permissions granted", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -130,7 +124,7 @@ class MainActivity : ComponentActivity() {
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_WIFI_STATE,
                 Manifest.permission.CHANGE_WIFI_STATE,
-
+                Manifest.permission.ACCESS_COARSE_LOCATION,
                 // permission required by UWB API
                 Manifest.permission.UWB_RANGING,
                 //permission for notification

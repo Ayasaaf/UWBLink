@@ -3987,8 +3987,10 @@ mipmap ic_launcher_foreground
 mipmap ic_launcher_round
 navigation nav_graph
 plurals mtrl_badge_content_description
+raw alert
 raw buettoth
 raw chat
+raw danger
 raw getstarted
 raw hello
 raw locate

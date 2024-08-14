@@ -220,6 +220,10 @@
         "source": "fr.eya.uwblink.app-main-93:/drawable-xxhdpi/ic_stop.png"
     },
     {
+        "merged": "fr.eya.uwblink.app-merged_res-91:/raw_danger.json.flat",
+        "source": "fr.eya.uwblink.app-main-93:/raw/danger.json"
+    },
+    {
         "merged": "fr.eya.uwblink.app-merged_res-91:/layout_content_main.xml.flat",
         "source": "fr.eya.uwblink.app-main-93:/layout/content_main.xml"
     },
@@ -258,6 +262,10 @@
     {
         "merged": "fr.eya.uwblink.app-merged_res-91:/drawable-hdpi_ic_profile.png.flat",
         "source": "fr.eya.uwblink.app-main-93:/drawable-hdpi/ic_profile.png"
+    },
+    {
+        "merged": "fr.eya.uwblink.app-merged_res-91:/raw_alert.json.flat",
+        "source": "fr.eya.uwblink.app-main-93:/raw/alert.json"
     },
     {
         "merged": "fr.eya.uwblink.app-merged_res-91:/drawable-hdpi_ic_clear.png.flat",
