@@ -25,6 +25,8 @@ import javax.inject.Inject
 class BluetoothViewModel @Inject constructor(
     private val bluetoothController: BluetoothController
 ) : ViewModel() {
+
+
     val TAG = "BluetoothViewModel"
     private val _state = MutableStateFlow(BluetoothUiState())
     val state = combine(

@@ -127,8 +127,7 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 
 
-    //Dager implementation
-
+    //Dagger implementation
     implementation("com.google.dagger:hilt-android:2.51")
     ksp("com.google.dagger:hilt-compiler:2.51")
 
@@ -150,6 +149,8 @@ dependencies {
 
     //porto
     implementation ("androidx.datastore:datastore:1.0.0")
+
+
     implementation ("com.google.protobuf:protobuf-javalite:3.21.5")
     implementation ("com.google.protobuf:protobuf-kotlin-lite:3.21.5")
 
@@ -166,6 +167,12 @@ dependencies {
 
     implementation ("androidx.core:core-ktx:1.6.0")
     implementation ("androidx.work:work-runtime-ktx:2.7.1")
+    //firebase
+    implementation ("com.google.firebase:firebase-database:21.0.0")
+    implementation ("com.google.firebase:firebase-auth:23.0.0")
+    //QR Scan
+    implementation ("com.journeyapps:zxing-android-embedded:4.3.0")  // ZXing for QR scanning
+    implementation ("androidx.activity:activity-compose:1.6.0")  // Activity support for Compose
 }
 
 

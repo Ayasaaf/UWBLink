@@ -120,5 +120,5 @@ fun AppNavBar(
 
 
 private val items =
-    listOf(Screen.Device, Screen.Home, Screen.Chat, Screen.Control, Screen.Send, Screen.Settings , Screen.Store , Screen.Alert)
+    listOf(Screen.Device, Screen.Home, Screen.Chat, Screen.Scan, Screen.Send, Screen.Settings , Screen.Store , Screen.Alert)
 

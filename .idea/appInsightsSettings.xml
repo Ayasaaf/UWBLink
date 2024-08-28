@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="fr.eya.uwblink" />
+                  <option name="mobileSdkAppId" value="1:719320551048:android:6777eb9374de5f8bd5193d" />
+                  <option name="projectId" value="uwblinl" />
+                  <option name="projectNumber" value="719320551048" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

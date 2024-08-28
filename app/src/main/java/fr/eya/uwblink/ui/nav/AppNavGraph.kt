@@ -43,6 +43,7 @@ import fr.eya.uwblink.ui.home.HomeViewModel
 import fr.eya.uwblink.ui.nav.AppDestination.CHAT_ROUTE
 import fr.eya.uwblink.ui.nav.AppDestination.CONTROL_ROUTE
 import fr.eya.uwblink.ui.nav.AppDestination.DEVICE_ROUTE
+import fr.eya.uwblink.ui.scan.QRScannerUI
 import fr.eya.uwblink.ui.send.SendRoute
 import fr.eya.uwblink.ui.send.SendViewModel
 import fr.eya.uwblink.ui.settings.SettingsRoute
@@ -97,7 +98,7 @@ fun AppNavGraph(
                         appContainer.rangingResultSource,
                     )
                 )
-            DataStorageScreen(viewModel = homeViewModel , context )
+            DataStorageScreen(viewModel = homeViewModel, context)
         }
         composable(AppDestination.Alert_Route) {
             val homeViewModel: HomeViewModel = viewModel(
@@ -161,13 +162,15 @@ fun AppNavGraph(
                             progress = progress,
                             modifier = Modifier.size(200.dp)
                         )
-                        Text(text = "You need to pair a device to chat" , fontSize = 20.sp)
+                        Text(text = "You need to pair a device to chat", fontSize = 20.sp)
                     }
                 }
             }
         }
 
-
+        composable(AppDestination.Scan_Route) {
+            QRScannerUI()
+        }
 
         composable(CONTROL_ROUTE) {
             val controlViewModel: ControlViewModel =
@@ -191,7 +194,7 @@ fun AppNavGraph(
                     factory =
                     SendViewModel.provideFactory(
                         appContainer.rangingResultSource,
-                        appContainer.contentResolver , appContext = context
+                        appContainer.contentResolver, appContext = context
                     )
                 )
             SendRoute(sendViewModel = sendViewModel)

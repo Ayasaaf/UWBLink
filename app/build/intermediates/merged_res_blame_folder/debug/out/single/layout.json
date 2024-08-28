@@ -1,10 +1,10 @@
 [
     {
-        "merged": "fr.eya.uwblink.app-mergeDebugResources-90:/layout/activity_main.xml",
-        "source": "fr.eya.uwblink.app-main-93:/layout/activity_main.xml"
+        "merged": "fr.eya.uwblink.app-mergeDebugResources-96:/layout/content_main.xml",
+        "source": "fr.eya.uwblink.app-main-99:/layout/content_main.xml"
     },
     {
-        "merged": "fr.eya.uwblink.app-mergeDebugResources-90:/layout/content_main.xml",
-        "source": "fr.eya.uwblink.app-main-93:/layout/content_main.xml"
+        "merged": "fr.eya.uwblink.app-mergeDebugResources-96:/layout/activity_main.xml",
+        "source": "fr.eya.uwblink.app-main-99:/layout/activity_main.xml"
     }
 ]
